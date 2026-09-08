@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — Wonkerh's Car Hire</title>
+<title>Register — Wonkerh's Car Hire</title>
 <link rel="stylesheet" href="assets/style.css">
 <style>
-  /* ---------- Login Page Styles ---------- */
+  /* ---------- Registration Page Styles ---------- */
   .auth-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -19,7 +19,7 @@
     box-shadow: var(--shadow-lg);
   }
 
-  /* ---------- Left Side: Login Form ---------- */
+  /* ---------- Left Side: Registration Form ---------- */
   .auth-card {
     background: #fff;
     padding: 48px 40px;
@@ -47,7 +47,12 @@
   .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
+  }
+  .auth-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
   }
   .auth-form .form-field {
     position: relative;
@@ -61,7 +66,8 @@
     color: var(--ink-faint);
     margin-bottom: 4px;
   }
-  .auth-form .form-field input {
+  .auth-form .form-field input,
+  .auth-form .form-field select {
     width: 100%;
     padding: 12px 16px;
     padding-right: 48px;
@@ -72,7 +78,8 @@
     transition: all var(--transition);
     background: var(--gray-50);
   }
-  .auth-form .form-field input:focus {
+  .auth-form .form-field input:focus,
+  .auth-form .form-field select:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
@@ -96,21 +103,48 @@
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .auth-remember {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13.5px;
-    color: var(--ink-soft);
+  .auth-form .password-hint {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-top: -6px;
   }
-  .auth-remember input[type="checkbox"] {
+  .auth-form .password-hint .check {
+    display: inline-block;
+    margin-right: 4px;
+  }
+  .auth-form .password-hint .valid {
+    color: #10B981;
+  }
+  .auth-form .password-hint .invalid {
+    color: #EF4444;
+  }
+  .auth-terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .auth-terms input[type="checkbox"] {
     accent-color: var(--primary);
     width: 16px;
     height: 16px;
     cursor: pointer;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .auth-terms a {
+    color: var(--primary);
+    font-weight: 600;
+    transition: color var(--transition);
+  }
+  .auth-terms a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
   }
   .auth-form .btn-primary {
-    margin-top: 6px;
+    margin-top: 4px;
     padding: 14px;
     font-size: 16px;
     display: flex;
@@ -127,25 +161,11 @@
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .auth-links {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 4px;
-  }
-  .auth-links a {
-    font-size: 13px;
-    color: var(--ink-faint);
-    transition: color var(--transition);
-  }
-  .auth-links a:hover {
-    color: var(--primary);
-  }
   .auth-divider {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin: 6px 0 4px;
+    margin: 2px 0;
   }
   .auth-divider::before,
   .auth-divider::after {
@@ -190,18 +210,18 @@
     background: var(--primary-bg);
     color: var(--primary);
   }
-  .register-link {
+  .login-link {
     text-align: center;
     font-size: 14px;
     color: var(--ink-soft);
-    margin-top: 4px;
+    margin-top: 2px;
   }
-  .register-link a {
+  .login-link a {
     color: var(--primary);
     font-weight: 700;
     transition: color var(--transition);
   }
-  .register-link a:hover {
+  .login-link a:hover {
     color: var(--primary-dark);
     text-decoration: underline;
   }
@@ -477,6 +497,9 @@
       font-size: 11px;
       padding: 4px 12px;
     }
+    .auth-form .form-row {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 480px) {
@@ -516,6 +539,30 @@
     .slide-nav {
       display: none;
     }
+  }
+
+  /* ---------- Success State ---------- */
+  .registration-success {
+    display: none;
+    text-align: center;
+    padding: 20px 0;
+  }
+  .registration-success.show {
+    display: block;
+  }
+  .registration-success .success-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  .registration-success h3 {
+    font-size: 24px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .registration-success p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 20px;
   }
 </style>
 </head>
@@ -558,9 +605,9 @@
 
 <div class="page-head" style="padding:44px 0 40px;">
   <div class="wrap in">
-    <div class="breadcrumb"><a href="index.html">Home</a> / Login</div>
-    <h1 style="font-size:32px;">Welcome back</h1>
-    <p>Log in to manage bookings, or register to check out faster next time.</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> / Register</div>
+    <h1 style="font-size:32px;">Create your account</h1>
+    <p>Join Wonkerh's and start booking cars in minutes.</p>
   </div>
   <div class="route-strip"></div>
 </div>
@@ -568,133 +615,197 @@
 <section>
   <div class="wrap">
     <div class="auth-grid">
-      <!-- LEFT: Login Form -->
+      <!-- LEFT: Registration Form -->
       <div class="auth-card">
         <div class="brand-icon">
           <img src="images/logo.jpg" alt="Wonkerh's Car Hire" onerror="this.style.display='none'">
         </div>
-        <h2>Welcome Back</h2>
-        <p class="subtitle">Log in to your Wonkerh's account</p>
 
-        <form class="auth-form" onsubmit="return false;">
-          <div class="form-field">
-            <label for="l-email">Email address</label>
-            <input type="email" id="l-email" placeholder="you@example.com" required>
-            <span class="input-icon">
+        <!-- Registration Form -->
+        <div id="registrationForm">
+          <h2>Get Started</h2>
+          <p class="subtitle">Create your free account today</p>
+
+          <form class="auth-form" id="registerForm" onsubmit="return false;">
+            <div class="form-row">
+              <div class="form-field">
+                <label for="r-firstname">First name</label>
+                <input type="text" id="r-firstname" placeholder="John" required>
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="form-field">
+                <label for="r-lastname">Last name</label>
+                <input type="text" id="r-lastname" placeholder="Doe" required>
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="r-email">Email address</label>
+              <input type="email" id="r-email" placeholder="you@example.com" required>
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </span>
+            </div>
+
+            <div class="form-field">
+              <label for="r-phone">Phone number</label>
+              <input type="tel" id="r-phone" placeholder="+27 82 123 4567">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+              </span>
+            </div>
+
+            <div class="form-field">
+              <label for="r-password">Password</label>
+              <input type="password" id="r-password" placeholder="Create a strong password" required>
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+              </span>
+            </div>
+            <div class="password-hint" id="passwordHint">
+              <span class="check" id="lengthCheck">⬜</span> At least 8 characters
+              <span class="check" id="caseCheck" style="margin-left:12px;">⬜</span> Uppercase & lowercase
+              <span class="check" id="numberCheck" style="margin-left:12px;">⬜</span> At least 1 number
+            </div>
+
+            <div class="form-field">
+              <label for="r-confirm">Confirm password</label>
+              <input type="password" id="r-confirm" placeholder="Confirm your password" required>
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+              </span>
+            </div>
+
+            <div class="auth-terms">
+              <input type="checkbox" id="r-terms" required>
+              <label for="r-terms">
+                I agree to the <a href="#" onclick="alert('Terms & Conditions would open here.'); return false;">Terms &amp; Conditions</a> 
+                and <a href="#" onclick="alert('Privacy Policy would open here.'); return false;">Privacy Policy</a>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
               <svg viewBox="0 0 24 24">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
+                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/>
+                <line x1="20" y1="8" x2="20" y2="14"/>
+                <line x1="23" y1="11" x2="17" y2="11"/>
               </svg>
-            </span>
-          </div>
-          <div class="form-field">
-            <label for="l-password">Password</label>
-            <input type="password" id="l-password" placeholder="••••••••" required>
-            <span class="input-icon">
-              <svg viewBox="0 0 24 24">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0110 0v4"/>
-              </svg>
-            </span>
-          </div>
-          <div class="auth-remember">
-            <input type="checkbox" id="l-remember">
-            <label for="l-remember">Remember me on this device</label>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">
-            <svg viewBox="0 0 24 24">
-              <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/>
-              <polyline points="10 17 15 12 10 7"/>
-              <line x1="15" y1="12" x2="3" y2="12"/>
-            </svg>
-            Log In
-          </button>
-
-          <div class="auth-links">
-            <a href="#">Forgot password?</a>
-          </div>
-
-          <div class="auth-divider">
-            <span>or continue with</span>
-          </div>
-
-          <div class="social-login">
-            <button type="button">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              Google
+              Create Account
             </button>
-            <button type="button">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-              Facebook
-            </button>
-          </div>
 
-          <p class="register-link">
-            Don't have an account? <a href="register.html">Create one now</a>
-          </p>
-        </form>
+            <div class="auth-divider">
+              <span>or continue with</span>
+            </div>
+
+            <div class="social-login">
+              <button type="button">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Google
+              </button>
+              <button type="button">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Facebook
+              </button>
+            </div>
+
+            <p class="login-link">
+              Already have an account? <a href="login.html">Log in here</a>
+            </p>
+          </form>
+        </div>
+
+        <!-- Success State -->
+        <div class="registration-success" id="registrationSuccess">
+          <div class="success-icon">🎉</div>
+          <h3>Account Created!</h3>
+          <p>Welcome to Wonkerh's Car Hire. Check your email to verify your account.</p>
+          <a href="login.html" class="btn btn-primary">Log In Now</a>
+        </div>
       </div>
 
-      <!-- RIGHT: Full-Screen Slideshow with Overlay Text -->
+      <!-- RIGHT: Full-Screen Slideshow -->
       <div class="auth-slideshow">
         <div class="slideshow-container" id="slideshowContainer">
 
-          <!-- Slide 1: Toyota Corolla -->
+          <!-- Slide 1 -->
           <div class="slide active" data-index="0" style="background-image: url('images/corolla.jpg');">
             <div class="slide-content">
-              <h3>Your Journey <span class="highlight">Starts Here</span></h3>
-              <p>Book the perfect car for your next adventure. From city runs to cross-country road trips.</p>
+              <h3>Join <span class="highlight">Thousands</span> of Renters</h3>
+              <p>Create your account and get access to our entire fleet of quality vehicles.</p>
               <div class="reassurance-badge">
                 <svg viewBox="0 0 24 24">
                   <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
                   <polyline points="22 4 12 14.01 9 11.01"/>
                 </svg>
-                12 branches nationwide
+                Free account, no hidden fees
               </div>
             </div>
           </div>
 
-          <!-- Slide 2: Toyota Fortuner -->
+          <!-- Slide 2 -->
           <div class="slide" data-index="1" style="background-image: url('images/fortuner.jpg');">
             <div class="slide-content">
-              <h3>Drive With <span class="highlight">Confidence</span></h3>
-              <p>Every vehicle is serviced, inspected, and detailed between rentals. Your safety is our priority.</p>
+              <h3>Drive <span class="highlight">Your Way</span></h3>
+              <p>Choose from 14 vehicles across 5 categories. Book in minutes, drive in hours.</p>
               <div class="reassurance-badge">
                 <svg viewBox="0 0 24 24">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                   <polyline points="9 12 11 14 15 10"/>
                 </svg>
-                Comprehensive insurance included
+                Full insurance coverage
               </div>
             </div>
           </div>
 
-          <!-- Slide 3: BMW 3 Series -->
+          <!-- Slide 3 -->
           <div class="slide" data-index="2" style="background-image: url('images/bmw.jpg');">
             <div class="slide-content">
-              <h3>Rated <span class="highlight">4.8/5</span> by Renters</h3>
-              <p>Join thousands of satisfied customers who trust Wonkerh's for reliable, affordable car hire.</p>
+              <h3>Rated <span class="highlight">4.8/5</span></h3>
+              <p>Join our community of happy renters. We're trusted by students and professionals alike.</p>
               <div class="reassurance-badge">
                 <svg viewBox="0 0 24 24">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                 </svg>
-                1,200+ 5-star reviews
+                1,200+ verified reviews
               </div>
             </div>
           </div>
 
-          <!-- Slide 4: Hyundai Creta -->
+          <!-- Slide 4 -->
           <div class="slide" data-index="3" style="background-image: url('images/creta.jpg');">
             <div class="slide-content">
-              <h3>Secure &amp; <span class="highlight">Simple</span></h3>
-              <p>Your data is protected with bank-grade encryption. Book in minutes, not hours.</p>
+              <h3><span class="highlight">Secure</span> &amp; Private</h3>
+              <p>Your personal data is protected with bank-grade encryption. We never share your info.</p>
               <div class="reassurance-badge">
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -707,16 +818,16 @@
             </div>
           </div>
 
-          <!-- Slide 5: Toyota Quantum -->
+          <!-- Slide 5 -->
           <div class="slide" data-index="4" style="background-image: url('images/quantum.jpg');">
             <div class="slide-content">
               <h3>24/7 <span class="highlight">Support</span></h3>
-              <p>Our team is always here to help. Real people, real solutions, any time of day.</p>
+              <p>Our team is here for you any time, any day. Real people, real solutions.</p>
               <div class="reassurance-badge">
                 <svg viewBox="0 0 24 24">
                   <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
                 </svg>
-                Call us anytime: 0860 999 500
+                Call us: 0860 999 500
               </div>
             </div>
           </div>
@@ -765,9 +876,23 @@
         </div>
         <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
         <div class="social-row" style="margin-top:18px;">
-          <a href="#" aria-label="Instagram">IG</a>
-          <a href="#" aria-label="X">X</a>
-          <a href="#" aria-label="WhatsApp">WA</a>
+          <a href="#" aria-label="Instagram" class="social-link ig-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="5"/>
+              <circle cx="17.5" cy="6.5" r="1.5"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="X (Twitter)" class="social-link x-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="WhatsApp" class="social-link wa-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div>
@@ -817,7 +942,6 @@
     let slideInterval;
     let isTransitioning = false;
 
-    // Update counter
     function updateCounter(index) {
       if (slideCounter) {
         const num = String(index + 1).padStart(2, '0');
@@ -826,7 +950,6 @@
       }
     }
 
-    // Show specific slide
     function showSlide(index) {
       if (isTransitioning) return;
       if (index < 0) index = totalSlides - 1;
@@ -846,7 +969,6 @@
       progressBar.style.width = progress + '%';
 
       updateCounter(index);
-
       currentSlide = index;
 
       setTimeout(() => {
@@ -874,7 +996,6 @@
       resetInterval();
     }
 
-    // Event Listeners
     if (prevBtn) prevBtn.addEventListener('click', prevSlide);
     if (nextBtn) nextBtn.addEventListener('click', nextSlide);
 
@@ -889,7 +1010,6 @@
       else if (e.key === 'ArrowLeft') prevSlide();
     });
 
-    // Touch swipe
     let touchStartX = 0;
     const container = document.getElementById('slideshowContainer');
     if (container) {
@@ -904,7 +1024,6 @@
       });
     }
 
-    // Pause on hover
     const slideshowSection = document.querySelector('.auth-slideshow');
     if (slideshowSection) {
       slideshowSection.addEventListener('mouseenter', () => clearInterval(slideInterval));
@@ -913,14 +1032,74 @@
 
     resetInterval();
 
+    // ---------- Password Strength Validation ----------
+    const passwordInput = document.getElementById('r-password');
+    const confirmInput = document.getElementById('r-confirm');
+    const lengthCheck = document.getElementById('lengthCheck');
+    const caseCheck = document.getElementById('caseCheck');
+    const numberCheck = document.getElementById('numberCheck');
+
+    function validatePassword(password) {
+      const hasLength = password.length >= 8;
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasCase = hasUpperCase && hasLowerCase;
+
+      lengthCheck.textContent = hasLength ? '✅' : '⬜';
+      lengthCheck.className = 'check ' + (hasLength ? 'valid' : 'invalid');
+      
+      caseCheck.textContent = hasCase ? '✅' : '⬜';
+      caseCheck.className = 'check ' + (hasCase ? 'valid' : 'invalid');
+      
+      numberCheck.textContent = hasNumber ? '✅' : '⬜';
+      numberCheck.className = 'check ' + (hasNumber ? 'valid' : 'invalid');
+
+      return hasLength && hasCase && hasNumber;
+    }
+
+    if (passwordInput) {
+      passwordInput.addEventListener('input', function() {
+        validatePassword(this.value);
+      });
+    }
+
     // ---------- Form Validation ----------
-    const loginForm = document.querySelector('.auth-form');
-    if (loginForm) {
-      loginForm.addEventListener('submit', function(e) {
+    const registerForm = document.getElementById('registerForm');
+    const registrationForm = document.getElementById('registrationForm');
+    const registrationSuccess = document.getElementById('registrationSuccess');
+
+    if (registerForm) {
+      registerForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const email = document.getElementById('l-email');
-        const password = document.getElementById('l-password');
+
+        const firstName = document.getElementById('r-firstname');
+        const lastName = document.getElementById('r-lastname');
+        const email = document.getElementById('r-email');
+        const phone = document.getElementById('r-phone');
+        const password = document.getElementById('r-password');
+        const confirm = document.getElementById('r-confirm');
+        const terms = document.getElementById('r-terms');
         let hasError = false;
+
+        // Validate fields
+        if (!firstName.value.trim()) {
+          firstName.style.borderColor = '#EF4444';
+          firstName.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1)';
+          hasError = true;
+        } else {
+          firstName.style.borderColor = '';
+          firstName.style.boxShadow = '';
+        }
+
+        if (!lastName.value.trim()) {
+          lastName.style.borderColor = '#EF4444';
+          lastName.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1)';
+          hasError = true;
+        } else {
+          lastName.style.borderColor = '';
+          lastName.style.boxShadow = '';
+        }
 
         if (!email.value || !email.value.includes('@')) {
           email.style.borderColor = '#EF4444';
@@ -931,7 +1110,8 @@
           email.style.boxShadow = '';
         }
 
-        if (!password.value || password.value.length < 6) {
+        const isPasswordValid = validatePassword(password.value);
+        if (!isPasswordValid) {
           password.style.borderColor = '#EF4444';
           password.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1)';
           hasError = true;
@@ -940,7 +1120,24 @@
           password.style.boxShadow = '';
         }
 
+        if (password.value !== confirm.value || confirm.value === '') {
+          confirm.style.borderColor = '#EF4444';
+          confirm.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1)';
+          hasError = true;
+        } else {
+          confirm.style.borderColor = '';
+          confirm.style.boxShadow = '';
+        }
+
+        if (!terms.checked) {
+          terms.style.outline = '2px solid #EF4444';
+          hasError = true;
+        } else {
+          terms.style.outline = '';
+        }
+
         if (!hasError) {
+          // Show loading state
           const btn = this.querySelector('.btn-primary');
           const originalHTML = btn.innerHTML;
           btn.innerHTML = `
@@ -948,28 +1145,23 @@
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" fill="none"/>
               <path d="M12 2a10 10 0 0110 10" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
             </svg>
-            Logging in...
+            Creating account...
           `;
           btn.style.background = '#10B981';
           btn.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.4)';
+          btn.disabled = true;
 
+          // Simulate account creation
           setTimeout(() => {
-            btn.innerHTML = `
-              <svg viewBox="0 0 24 24">
-                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
-              </svg>
-              Welcome back!
-            `;
-            setTimeout(() => {
-              btn.innerHTML = originalHTML;
-              btn.style.background = '';
-              btn.style.boxShadow = '';
-            }, 2000);
-          }, 1500);
+            // Hide form, show success
+            registrationForm.style.display = 'none';
+            registrationSuccess.classList.add('show');
+            registrationSuccess.style.display = 'block';
+          }, 2000);
         }
       });
 
+      // Clear errors on focus
       document.querySelectorAll('.auth-form input').forEach(input => {
         input.addEventListener('focus', function() {
           this.style.borderColor = '';
@@ -977,33 +1169,6 @@
         });
       });
     }
-
-    // Social Login
-    document.querySelectorAll('.social-login button').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const provider = this.textContent.trim();
-        this.innerHTML = `
-          <svg viewBox="0 0 24 24" style="animation: spin 1s linear infinite;">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" fill="none"/>
-            <path d="M12 2a10 10 0 0110 10" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          </svg>
-          Connecting...
-        `;
-        this.disabled = true;
-
-        setTimeout(() => {
-          this.innerHTML = provider;
-          this.disabled = false;
-          alert(`${provider} login would open here in production.`);
-        }, 1500);
-      });
-    });
-
-    // Forgot Password only (register link now works normally)
-    document.querySelector('.auth-links a')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      alert('Password reset email would be sent in production.');
-    });
 
     // Add spin animation
     const style = document.createElement('style');

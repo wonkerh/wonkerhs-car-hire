@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  /* ---------- Dashboard Styles ---------- */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .dashboard-sidebar {
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    position: sticky;
+    top: 100px;
+  }
+
+  .dashboard-sidebar .user-avatar {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .dashboard-sidebar .user-avatar .avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 32px;
+    color: #fff;
+    font-weight: 700;
+    font-family: 'Archivo Black', sans-serif;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .dashboard-sidebar .user-avatar h3 {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
+  .dashboard-sidebar .user-avatar p {
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  .dashboard-sidebar .user-avatar .badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 14px;
+    background: var(--primary-bg);
+    color: var(--primary);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .sidebar-nav {
+    border-top: 1px solid var(--paper-line);
+    padding-top: 20px;
+    margin-top: 4px;
+  }
+
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 14px;
+    transition: all var(--transition);
+    margin-bottom: 4px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .sidebar-nav a svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--ink-faint);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  .sidebar-nav a:hover {
+    background: var(--primary-bg);
+    color: var(--primary);
+  }
+
+  .sidebar-nav a:hover svg {
+    stroke: var(--primary);
+  }
+
+  .sidebar-nav a.active {
+    background: var(--primary-gradient);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  }
+
+  .sidebar-nav a.active svg {
+    stroke: #fff;
+  }
+
+  .sidebar-nav .logout {
+    margin-top: 16px;
+    border-top: 1px solid var(--paper-line);
+    padding-top: 16px;
+    color: #EF4444;
+  }
+
+  .sidebar-nav .logout svg {
+    stroke: #EF4444;
+  }
+
+  .sidebar-nav .logout:hover {
+    background: rgba(239, 68, 68, 0.08);
+    color: #EF4444;
+  }
+
+  /* ---------- Main Content ---------- */
+  .dashboard-main {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Stats Cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    transition: all var(--transition);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .stat-card .stat-icon {
+    margin-bottom: 8px;
+  }
+
+  .stat-card .stat-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--primary);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .stat-card .stat-number {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 28px;
+    color: var(--ink);
+  }
+
+  .stat-card .stat-label {
+    font-size: 13px;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+
+  .stat-card .stat-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 6px;
+    padding: 2px 10px;
+    border-radius: 999px;
+  }
+
+  .stat-card .stat-change.positive {
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  .stat-card .stat-change.negative {
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  /* Section Headers */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .section-header h2 {
+    font-size: 22px;
+    font-family: 'Archivo Black', sans-serif;
+  }
+
+  .section-header a {
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 600;
+    transition: color var(--transition);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .section-header a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+  }
+
+  /* Booking Cards */
+  .booking-card {
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all var(--transition);
+    margin-bottom: 12px;
+  }
+
+  .booking-card:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary);
+  }
+
+  .booking-card .booking-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .booking-card .booking-car {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .booking-card .booking-car img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .booking-card .booking-details h4 {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  .booking-card .booking-details .meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  .booking-card .booking-details .meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .booking-card .booking-details .meta svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--ink-faint);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .booking-card .booking-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .booking-card .booking-status .status {
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .booking-card .booking-status .status.active {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+
+  .booking-card .booking-status .status.upcoming {
+    background: #DBEAFE;
+    color: #1E40AF;
+  }
+
+  .booking-card .booking-status .status.completed {
+    background: var(--gray-100);
+    color: var(--ink-faint);
+  }
+
+  .booking-card .booking-status .status.cancelled {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+
+  .booking-card .booking-status .price {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    color: var(--primary);
+  }
+
+  .booking-card .booking-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: 16px;
+  }
+
+  .booking-card .booking-actions button {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--paper-line);
+    background: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: var(--ink-soft);
+  }
+
+  .booking-card .booking-actions button:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-bg);
+  }
+
+  .booking-card .booking-actions button.danger:hover {
+    border-color: #EF4444;
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.08);
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+  }
+
+  .empty-state .empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+
+  .empty-state h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    color: var(--ink-soft);
+    max-width: 400px;
+    margin: 0 auto 20px;
+  }
+
+  /* Quick Actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .quick-action-card {
+    padding: 20px 24px;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    text-decoration: none;
+    transition: all var(--transition);
+    cursor: pointer;
+    border: none;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .quick-action-card svg {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 4px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .quick-action-card h3 {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
+  .quick-action-card p {
+    font-size: 13px;
+    margin-top: 2px;
+    opacity: 0.7;
+  }
+
+  .quick-action-card.primary {
+    background: var(--primary-gradient);
+    color: #fff;
+  }
+
+  .quick-action-card.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+  }
+
+  .quick-action-card.dark {
+    background: var(--gray-900);
+    color: #fff;
+  }
+
+  .quick-action-card.dark:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--gray-900);
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 400px;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .toast svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  .toast.success {
+    border-left: 4px solid #10B981;
+  }
+
+  .toast.error {
+    border-left: 4px solid #EF4444;
+  }
+
+  .toast.info {
+    border-left: 4px solid var(--primary);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dashboard-sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 20px 24px;
+    }
+
+    .dashboard-sidebar .user-avatar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 0;
+      text-align: left;
+    }
+
+    .dashboard-sidebar .user-avatar .avatar-circle {
+      margin: 0;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+    }
+
+    .sidebar-nav {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .sidebar-nav a {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+
+    .sidebar-nav a span {
+      display: none;
+    }
+
+    .sidebar-nav .logout {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .quick-actions {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .booking-card {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    .booking-card .booking-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .booking-card .booking-status {
+      align-items: flex-start;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .booking-card .booking-actions {
+      margin-left: 0;
+      justify-content: flex-start;
+    }
+
+    .dashboard-sidebar {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dashboard-sidebar .user-avatar {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .toast {
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">
+      <img src="images/logo.jpg" alt="Wonkerh's" style="height:32px; width:auto;" onerror="this.style.display='none'">
+      Wonkerh's<span>·</span>Car&nbsp;Hire
+    </a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <span class="nav-phone">📞 0860 999 500</span>
+      <a href="results.html" class="btn btn-primary btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-head" style="padding:44px 0 40px;">
+  <div class="wrap in">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Dashboard</div>
+    <h1 style="font-size:32px;">My Dashboard</h1>
+    <p>Manage your bookings and account settings.</p>
+  </div>
+  <div class="route-strip"></div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="dashboard-grid">
+      <!-- SIDEBAR -->
+      <aside class="dashboard-sidebar">
+        <div class="user-avatar">
+          <div class="avatar-circle">JD</div>
+          <div>
+            <h3>John Doe</h3>
+            <p>john.doe@example.com</p>
+            <span class="badge">Verified Member</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="#" class="active" data-page="dashboard">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" data-page="bookings">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>My Bookings</span>
+          </a>
+          <a href="#" data-page="profile">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>Profile</span>
+          </a>
+          <a href="#" data-page="insurance">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <span>Insurance</span>
+          </a>
+          <a href="#" data-page="messages">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>Messages</span>
+            <span style="margin-left:auto; background:#EF4444; color:#fff; padding:2px 8px; border-radius:999px; font-size:11px;">3</span>
+          </a>
+          <a href="#" class="logout" data-page="logout">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Log Out</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="dashboard-main">
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <div class="stat-number">2</div>
+            <div class="stat-label">Active Bookings</div>
+            <span class="stat-change positive">↑ 1 from last month</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <div class="stat-number">4</div>
+            <div class="stat-label">Total Bookings</div>
+            <span class="stat-change positive">↑ 2 this year</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <div class="stat-number">4.8</div>
+            <div class="stat-label">Average Rating</div>
+            <span class="stat-change positive">↑ 0.3 from last year</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+            <div class="stat-number">R2,847</div>
+            <div class="stat-label">Total Spent</div>
+            <span class="stat-change negative">↓ R350 from last month</span>
+          </div>
+        </div>
+
+        <!-- Current Bookings -->
+        <div>
+          <div class="section-header">
+            <h2>📍 Current Bookings</h2>
+            <a href="vehicles.html">Browse more cars →</a>
+          </div>
+
+          <!-- Booking 1 -->
+          <div class="booking-card">
+            <div class="booking-info">
+              <div class="booking-car">
+                <img src="images/corolla.jpg" alt="Toyota Corolla" onerror="this.style.display='none'">
+              </div>
+              <div class="booking-details">
+                <h4>Toyota Corolla</h4>
+                <div class="meta">
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Dec 15 - Dec 20, 2026
+                  </span>
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Pietermaritzburg
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="booking-status">
+              <span class="status active">Active</span>
+              <span class="price">R2,945</span>
+            </div>
+            <div class="booking-actions">
+              <button class="view-details" data-booking="corolla">View Details</button>
+              <button class="danger cancel-booking" data-booking="corolla">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Booking 2 -->
+          <div class="booking-card">
+            <div class="booking-info">
+              <div class="booking-car">
+                <img src="images/fortuner.jpg" alt="Toyota Fortuner" onerror="this.style.display='none'">
+              </div>
+              <div class="booking-details">
+                <h4>Toyota Fortuner</h4>
+                <div class="meta">
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Jan 5 - Jan 12, 2027
+                  </span>
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Durban — King Shaka
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="booking-status">
+              <span class="status upcoming">Upcoming</span>
+              <span class="price">R7,693</span>
+            </div>
+            <div class="booking-actions">
+              <button class="view-details" data-booking="fortuner">View Details</button>
+              <button class="danger cancel-booking" data-booking="fortuner">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Past Bookings -->
+        <div>
+          <div class="section-header">
+            <h2>📜 Past Bookings</h2>
+            <a href="#" class="view-all-past">View all →</a>
+          </div>
+
+          <!-- Past Booking 1 -->
+          <div class="booking-card">
+            <div class="booking-info">
+              <div class="booking-car">
+                <img src="images/starlet.jpg" alt="Toyota Starlet" onerror="this.style.display='none'">
+              </div>
+              <div class="booking-details">
+                <h4>Toyota Starlet</h4>
+                <div class="meta">
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Nov 1 - Nov 5, 2026
+                  </span>
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Pietermaritzburg
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="booking-status">
+              <span class="status completed">Completed</span>
+              <span class="price">R1,396</span>
+            </div>
+            <div class="booking-actions">
+              <button class="review-booking" data-booking="starlet">Review</button>
+              <button class="book-again" data-booking="starlet">Book Again</button>
+            </div>
+          </div>
+
+          <!-- Past Booking 2 -->
+          <div class="booking-card">
+            <div class="booking-info">
+              <div class="booking-car">
+                <img src="images/quantum.jpg" alt="Toyota Quantum" onerror="this.style.display='none'">
+              </div>
+              <div class="booking-details">
+                <h4>Toyota Quantum</h4>
+                <div class="meta">
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Sep 20 - Sep 22, 2026
+                  </span>
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Johannesburg — OR Tambo
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="booking-status">
+              <span class="status completed">Completed</span>
+              <span class="price">R1,798</span>
+            </div>
+            <div class="booking-actions">
+              <button class="review-booking" data-booking="quantum">Review</button>
+              <button class="book-again" data-booking="quantum">Book Again</button>
+            </div>
+          </div>
+
+          <!-- Past Booking 3 -->
+          <div class="booking-card">
+            <div class="booking-info">
+              <div class="booking-car">
+                <img src="images/bmw.jpg" alt="BMW 3 Series" onerror="this.style.display='none'">
+              </div>
+              <div class="booking-details">
+                <h4>BMW 3 Series</h4>
+                <div class="meta">
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Aug 10 - Aug 14, 2026
+                  </span>
+                  <span>
+                    <svg viewBox="0 0 24 24">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Cape Town — Airport
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="booking-status">
+              <span class="status cancelled">Cancelled</span>
+              <span class="price">R5,396</span>
+            </div>
+            <div class="booking-actions">
+              <button class="view-details" data-booking="bmw">View Details</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <a href="vehicles.html" class="quick-action-card primary">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <h3>Book a New Car</h3>
+            <p>Browse our fleet and book instantly</p>
+          </a>
+          <button class="quick-action-card dark" id="insuranceClaim">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <h3>Insurance Claim</h3>
+            <p>Report an incident or file a claim</p>
+          </button>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="images/logo.jpg" alt="Wonkerh's" style="height:28px; width:auto;" onerror="this.style.display='none'">
+          Wonkerh's<span>·</span>Car&nbsp;Hire
+        </div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram" class="social-link ig-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="5"/>
+              <circle cx="17.5" cy="6.5" r="1.5"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="X (Twitter)" class="social-link x-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="WhatsApp" class="social-link wa-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24">
+    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+    <polyline points="22 4 12 14.01 9 11.01"/>
+  </svg>
+  <span id="toastMessage">Action completed successfully!</span>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // ---------- Toast Notification ----------
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    let toastTimeout;
+
+    function showToast(message, type = 'success') {
+      toast.className = 'toast ' + type;
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // ---------- Sidebar Navigation ----------
+    const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const page = this.dataset.page;
+        
+        if (page === 'logout') {
+          if (confirm('Are you sure you want to log out?')) {
+            showToast('Logging out... Redirecting to home', 'info');
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 1500);
+          }
+          return;
+        }
+
+        // Remove active class from all
+        sidebarLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+
+        // Show different messages based on page
+        const pageNames = {
+          'dashboard': '📊 Dashboard',
+          'bookings': '📋 My Bookings',
+          'profile': '👤 Profile Settings',
+          'insurance': '🛡️ Insurance',
+          'messages': '💬 Messages'
+        };
+
+        if (pageNames[page]) {
+          showToast(`Loading ${pageNames[page]}...`, 'info');
+        }
+      });
+    });
+
+    // ---------- View Details Button ----------
+    document.querySelectorAll('.view-details').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const booking = this.dataset.booking;
+        showToast(`📋 Loading details for ${booking.replace('-', ' ')}...`, 'info');
+      });
+    });
+
+    // ---------- Cancel Booking Button ----------
+    document.querySelectorAll('.cancel-booking').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const booking = this.dataset.booking;
+        if (confirm(`Are you sure you want to cancel your booking for ${booking.replace('-', ' ')}?`)) {
+          showToast(`✅ Booking for ${booking.replace('-', ' ')} has been cancelled`, 'success');
+          this.closest('.booking-card').style.opacity = '0.5';
+        }
+      });
+    });
+
+    // ---------- Review Booking Button ----------
+    document.querySelectorAll('.review-booking').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const booking = this.dataset.booking;
+        const rating = prompt(`How would you rate your experience with ${booking.replace('-', ' ')}? (1-5)`);
+        if (rating && rating >= 1 && rating <= 5) {
+          showToast(`⭐ Thank you! You rated ${booking.replace('-', ' ')} ${rating}/5`, 'success');
+        } else if (rating) {
+          showToast('Please enter a rating between 1 and 5', 'error');
+        }
+      });
+    });
+
+    // ---------- Book Again Button ----------
+    document.querySelectorAll('.book-again').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const booking = this.dataset.booking;
+        showToast(`🚗 Redirecting to book ${booking.replace('-', ' ')} again...`, 'info');
+        setTimeout(() => {
+          window.location.href = 'results.html';
+        }, 1500);
+      });
+    });
+
+    // ---------- View All Past Bookings ----------
+    document.querySelector('.view-all-past')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      showToast('📜 Loading all past bookings...', 'info');
+    });
+
+    // ---------- Insurance Claim Button ----------
+    document.getElementById('insuranceClaim')?.addEventListener('click', function() {
+      showToast('🛡️ Insurance claim form would open here', 'info');
+    });
+
+    // ---------- Profile Updates ----------
+    // Simulate profile data loading
+    console.log('Dashboard loaded successfully!');
+  });
+</script>
+</body>
+</html>

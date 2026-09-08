@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleet Monitor — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  /* ---------- Fleet Monitor Styles ---------- */
+  .monitor-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .monitor-sidebar {
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    position: sticky;
+    top: 100px;
+  }
+
+  .monitor-sidebar .sidebar-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .monitor-sidebar .sidebar-header h3 {
+    font-size: 18px;
+    font-family: 'Archivo Black', sans-serif;
+  }
+
+  .monitor-sidebar .sidebar-header p {
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  .monitor-sidebar .sidebar-header .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 4px 12px;
+    background: #D1FAE5;
+    color: #065F46;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .monitor-sidebar .sidebar-header .live-indicator .dot {
+    width: 8px;
+    height: 8px;
+    background: #10B981;
+    border-radius: 50%;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 14px;
+    transition: all var(--transition);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .sidebar-nav a svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--ink-faint);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  .sidebar-nav a:hover {
+    background: var(--primary-bg);
+    color: var(--primary);
+  }
+
+  .sidebar-nav a:hover svg {
+    stroke: var(--primary);
+  }
+
+  .sidebar-nav a.active {
+    background: var(--primary-gradient);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  }
+
+  .sidebar-nav a.active svg {
+    stroke: #fff;
+  }
+
+  .sidebar-nav .badge-count {
+    margin-left: auto;
+    background: var(--gray-200);
+    color: var(--ink-soft);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .sidebar-nav .badge-count.danger {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+
+  .sidebar-nav .badge-count.success {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+
+  .sidebar-nav .badge-count.warning {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+
+  /* ---------- Main Content ---------- */
+  .monitor-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Stats Overview */
+  .stats-overview {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+
+  .stat-mini {
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    text-align: center;
+    transition: all var(--transition);
+  }
+
+  .stat-mini:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .stat-mini .stat-number {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 28px;
+  }
+
+  .stat-mini .stat-label {
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stat-mini .stat-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+
+  .stat-mini.available .stat-number { color: #10B981; }
+  .stat-mini.rented .stat-number { color: var(--primary); }
+  .stat-mini.maintenance .stat-number { color: #F59E0B; }
+  .stat-mini.reserved .stat-number { color: #8B5CF6; }
+  .stat-mini.overdue .stat-number { color: #EF4444; }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+  }
+
+  .toolbar .search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    max-width: 400px;
+  }
+
+  .toolbar .search-box input {
+    flex: 1;
+    padding: 8px 14px;
+    border: 2px solid var(--paper-line);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: all var(--transition);
+  }
+
+  .toolbar .search-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  }
+
+  .toolbar .filter-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar .filter-group button {
+    padding: 6px 16px;
+    border: 2px solid var(--paper-line);
+    border-radius: 8px;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: var(--ink-soft);
+  }
+
+  .toolbar .filter-group button:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .toolbar .filter-group button.active {
+    background: var(--primary-gradient);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  .toolbar .refresh-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--paper-line);
+    border-radius: 8px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .toolbar .refresh-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-bg);
+  }
+
+  .toolbar .refresh-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Fleet Table */
+  .fleet-table-container {
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .fleet-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .fleet-table thead {
+    background: var(--gray-50);
+  }
+
+  .fleet-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    border-bottom: 2px solid var(--paper-line);
+  }
+
+  .fleet-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--paper-line);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .fleet-table tr:hover td {
+    background: var(--gray-50);
+  }
+
+  .fleet-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .fleet-table .car-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .fleet-table .car-cell .car-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .fleet-table .car-cell .car-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fleet-table .car-cell .car-name {
+    font-weight: 700;
+  }
+
+  .fleet-table .car-cell .car-category {
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  .fleet-table .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .fleet-table .status-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .fleet-table .status-badge.available {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+  .fleet-table .status-badge.available .dot { background: #10B981; }
+
+  .fleet-table .status-badge.rented {
+    background: #DBEAFE;
+    color: #1E40AF;
+  }
+  .fleet-table .status-badge.rented .dot { background: var(--primary); }
+
+  .fleet-table .status-badge.maintenance {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+  .fleet-table .status-badge.maintenance .dot { background: #F59E0B; }
+
+  .fleet-table .status-badge.reserved {
+    background: #EDE9FE;
+    color: #5B21B6;
+  }
+  .fleet-table .status-badge.reserved .dot { background: #8B5CF6; }
+
+  .fleet-table .status-badge.overdue {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+  .fleet-table .status-badge.overdue .dot { background: #EF4444; }
+
+  .fleet-table .action-btn {
+    padding: 4px 12px;
+    border: 1px solid var(--paper-line);
+    border-radius: 6px;
+    background: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: var(--ink-soft);
+  }
+
+  .fleet-table .action-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-bg);
+  }
+
+  .fleet-table .action-btn.danger:hover {
+    border-color: #EF4444;
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.08);
+  }
+
+  /* Customer Info Tooltip */
+  .customer-info {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .customer-info .name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--gray-900);
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 400px;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .toast.success { border-left: 4px solid #10B981; }
+  .toast.error { border-left: 4px solid #EF4444; }
+  .toast.info { border-left: 4px solid var(--primary); }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .stats-overview {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .monitor-grid {
+      grid-template-columns: 1fr;
+    }
+    .monitor-sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 20px 24px;
+    }
+    .monitor-sidebar .sidebar-header {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .sidebar-nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+      border-top: none;
+      padding-top: 0;
+    }
+    .sidebar-nav a {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+    .sidebar-nav a span:not(.badge-count) {
+      display: none;
+    }
+    .stats-overview {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .fleet-table-container {
+      overflow-x: auto;
+    }
+    .fleet-table {
+      min-width: 700px;
+    }
+    .toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .toolbar .search-box {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-overview {
+      grid-template-columns: 1fr 1fr;
+    }
+    .monitor-sidebar {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .monitor-sidebar .sidebar-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    .toast {
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      max-width: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">
+      <img src="images/logo.jpg" alt="Wonkerh's" style="height:32px; width:auto;" onerror="this.style.display='none'">
+      Wonkerh's<span>·</span>Car&nbsp;Hire
+    </a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <span class="nav-phone">📞 0860 999 500</span>
+      <a href="results.html" class="btn btn-primary btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-head" style="padding:44px 0 40px;">
+  <div class="wrap in">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Fleet Monitor</div>
+    <h1 style="font-size:32px;">🚗 Fleet Monitor</h1>
+    <p>Real-time tracking of all vehicles — status, location, and rental details.</p>
+  </div>
+  <div class="route-strip"></div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="monitor-grid">
+      <!-- SIDEBAR -->
+      <aside class="monitor-sidebar">
+        <div class="sidebar-header">
+          <h3>Fleet Overview</h3>
+          <p>Live vehicle tracking</p>
+          <div class="live-indicator">
+            <span class="dot"></span>
+            Live Monitoring
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="#" class="active" data-filter="all">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span>All Vehicles</span>
+            <span class="badge-count">14</span>
+          </a>
+          <a href="#" data-filter="available">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Available</span>
+            <span class="badge-count success">5</span>
+          </a>
+          <a href="#" data-filter="rented">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <span>Rented Out</span>
+            <span class="badge-count">4</span>
+          </a>
+          <a href="#" data-filter="reserved">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Reserved</span>
+            <span class="badge-count warning">3</span>
+          </a>
+          <a href="#" data-filter="maintenance">
+            <svg viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+            <span>Maintenance</span>
+            <span class="badge-count danger">1</span>
+          </a>
+          <a href="#" data-filter="overdue">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Overdue</span>
+            <span class="badge-count danger">1</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="monitor-main">
+        <!-- Stats -->
+        <div class="stats-overview">
+          <div class="stat-mini available">
+            <div class="stat-icon">✅</div>
+            <div class="stat-number">5</div>
+            <div class="stat-label">Available</div>
+          </div>
+          <div class="stat-mini rented">
+            <div class="stat-icon">🚗</div>
+            <div class="stat-number">4</div>
+            <div class="stat-label">Rented Out</div>
+          </div>
+          <div class="stat-mini reserved">
+            <div class="stat-icon">📅</div>
+            <div class="stat-number">3</div>
+            <div class="stat-label">Reserved</div>
+          </div>
+          <div class="stat-mini maintenance">
+            <div class="stat-icon">🔧</div>
+            <div class="stat-number">1</div>
+            <div class="stat-label">Maintenance</div>
+          </div>
+          <div class="stat-mini overdue">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-number">1</div>
+            <div class="stat-label">Overdue</div>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by car, customer, or license...">
+          </div>
+          <div class="filter-group">
+            <button class="active" data-filter="all">All</button>
+            <button data-filter="available">Available</button>
+            <button data-filter="rented">Rented</button>
+            <button data-filter="reserved">Reserved</button>
+            <button data-filter="maintenance">Maintenance</button>
+            <button data-filter="overdue">Overdue</button>
+          </div>
+          <button class="refresh-btn" id="refreshBtn">
+            <svg viewBox="0 0 24 24">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+
+        <!-- Fleet Table -->
+        <div class="fleet-table-container">
+          <table class="fleet-table" id="fleetTable">
+            <thead>
+              <tr>
+                <th>Vehicle</th>
+                <th>License</th>
+                <th>Status</th>
+                <th>Customer</th>
+                <th>Location</th>
+                <th>Return Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fleetTableBody">
+              <!-- Row 1: Toyota Corolla - Rented -->
+              <tr data-status="rented">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/corolla.jpg" alt="Toyota Corolla" onerror="this.innerHTML='🚗'">
+                    </div>
+                    <div>
+                      <div class="car-name">Toyota Corolla</div>
+                      <div class="car-category">Family Sedan</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 123-456</td>
+                <td><span class="status-badge rented"><span class="dot"></span> Rented</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">John Doe</div>
+                    <div>+27 82 123 4567</div>
+                  </div>
+                </td>
+                <td>Pietermaritzburg</td>
+                <td>2026-12-20</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Toyota Corolla')">View</button>
+                  <button class="action-btn danger" onclick="markReturned('Toyota Corolla')">Return</button>
+                </td>
+              </tr>
+
+              <!-- Row 2: Toyota Fortuner - Rented -->
+              <tr data-status="rented">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/fortuner.jpg" alt="Toyota Fortuner" onerror="this.innerHTML='🏔️'">
+                    </div>
+                    <div>
+                      <div class="car-name">Toyota Fortuner</div>
+                      <div class="car-category">SUV</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 789-012</td>
+                <td><span class="status-badge rented"><span class="dot"></span> Rented</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">Sarah Smith</div>
+                    <div>+27 83 456 7890</div>
+                  </div>
+                </td>
+                <td>Durban — King Shaka</td>
+                <td>2026-12-18</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Toyota Fortuner')">View</button>
+                  <button class="action-btn danger" onclick="markReturned('Toyota Fortuner')">Return</button>
+                </td>
+              </tr>
+
+              <!-- Row 3: Toyota Starlet - Available -->
+              <tr data-status="available">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/starlet.jpg" alt="Toyota Starlet" onerror="this.innerHTML='🚙'">
+                    </div>
+                    <div>
+                      <div class="car-name">Toyota Starlet</div>
+                      <div class="car-category">Mini</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 345-678</td>
+                <td><span class="status-badge available"><span class="dot"></span> Available</span></td>
+                <td>—</td>
+                <td>Pietermaritzburg</td>
+                <td>—</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Toyota Starlet')">View</button>
+                  <button class="action-btn" onclick="markReserved('Toyota Starlet')">Reserve</button>
+                </td>
+              </tr>
+
+              <!-- Row 4: BMW 3 Series - Reserved -->
+              <tr data-status="reserved">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/bmw.jpg" alt="BMW 3 Series" onerror="this.innerHTML='🏎️'">
+                    </div>
+                    <div>
+                      <div class="car-name">BMW 3 Series</div>
+                      <div class="car-category">Luxury</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 901-234</td>
+                <td><span class="status-badge reserved"><span class="dot"></span> Reserved</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">Michael Brown</div>
+                    <div>+27 84 567 8901</div>
+                  </div>
+                </td>
+                <td>Cape Town — Airport</td>
+                <td>2026-12-25</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('BMW 3 Series')">View</button>
+                  <button class="action-btn" onclick="markRented('BMW 3 Series')">Start Rental</button>
+                </td>
+              </tr>
+
+              <!-- Row 5: Hyundai Creta - Available -->
+              <tr data-status="available">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/creta.jpg" alt="Hyundai Creta" onerror="this.innerHTML='🏔️'">
+                    </div>
+                    <div>
+                      <div class="car-name">Hyundai Creta</div>
+                      <div class="car-category">SUV</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 567-890</td>
+                <td><span class="status-badge available"><span class="dot"></span> Available</span></td>
+                <td>—</td>
+                <td>Johannesburg — OR Tambo</td>
+                <td>—</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Hyundai Creta')">View</button>
+                  <button class="action-btn" onclick="markReserved('Hyundai Creta')">Reserve</button>
+                </td>
+              </tr>
+
+              <!-- Row 6: Toyota Quantum - Overdue -->
+              <tr data-status="overdue">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/quantum.jpg" alt="Toyota Quantum" onerror="this.innerHTML='🚐'">
+                    </div>
+                    <div>
+                      <div class="car-name">Toyota Quantum</div>
+                      <div class="car-category">Minibus</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 234-567</td>
+                <td><span class="status-badge overdue"><span class="dot"></span> Overdue</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">David Wilson</div>
+                    <div>+27 82 901 2345</div>
+                  </div>
+                </td>
+                <td>Richards Bay</td>
+                <td>2026-12-10</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Toyota Quantum')">View</button>
+                  <button class="action-btn danger" onclick="markReturned('Toyota Quantum')">Return</button>
+                </td>
+              </tr>
+
+              <!-- Row 7: Ford EcoSport - Maintenance -->
+              <tr data-status="maintenance">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/ecosport.jpg" alt="Ford EcoSport" onerror="this.innerHTML='🏔️'">
+                    </div>
+                    <div>
+                      <div class="car-name">Ford EcoSport</div>
+                      <div class="car-category">SUV</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 678-901</td>
+                <td><span class="status-badge maintenance"><span class="dot"></span> Maintenance</span></td>
+                <td>—</td>
+                <td>Durban — Springfield</td>
+                <td>—</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Ford EcoSport')">View</button>
+                  <button class="action-btn" onclick="markAvailable('Ford EcoSport')">Mark Available</button>
+                </td>
+              </tr>
+
+              <!-- Row 8: Suzuki Swift - Available -->
+              <tr data-status="available">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/swift.jpg" alt="Suzuki Swift" onerror="this.innerHTML='🚙'">
+                    </div>
+                    <div>
+                      <div class="car-name">Suzuki Swift</div>
+                      <div class="car-category">Mini</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 890-123</td>
+                <td><span class="status-badge available"><span class="dot"></span> Available</span></td>
+                <td>—</td>
+                <td>Cape Town — City Bowl</td>
+                <td>—</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Suzuki Swift')">View</button>
+                  <button class="action-btn" onclick="markReserved('Suzuki Swift')">Reserve</button>
+                </td>
+              </tr>
+
+              <!-- Row 9: Hyundai Grand i10 - Reserved -->
+              <tr data-status="reserved">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/i10.jpg" alt="Hyundai Grand i10" onerror="this.innerHTML='🚘'">
+                    </div>
+                    <div>
+                      <div class="car-name">Hyundai Grand i10</div>
+                      <div class="car-category">Family</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 456-789</td>
+                <td><span class="status-badge reserved"><span class="dot"></span> Reserved</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">Emma Jones</div>
+                    <div>+27 83 210 9876</div>
+                  </div>
+                </td>
+                <td>Pretoria — Hatfield</td>
+                <td>2026-12-28</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Hyundai Grand i10')">View</button>
+                  <button class="action-btn" onclick="markRented('Hyundai Grand i10')">Start Rental</button>
+                </td>
+              </tr>
+
+              <!-- Row 10: VW Polo Vivo - Available -->
+              <tr data-status="available">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/polo.jpg" alt="Volkswagen Polo Vivo" onerror="this.innerHTML='🚙'">
+                    </div>
+                    <div>
+                      <div class="car-name">VW Polo Vivo</div>
+                      <div class="car-category">Mini</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 012-345</td>
+                <td><span class="status-badge available"><span class="dot"></span> Available</span></td>
+                <td>—</td>
+                <td>Pietermaritzburg</td>
+                <td>—</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('VW Polo Vivo')">View</button>
+                  <button class="action-btn" onclick="markReserved('VW Polo Vivo')">Reserve</button>
+                </td>
+              </tr>
+
+              <!-- Row 11: Mercedes C-Class - Rented -->
+              <tr data-status="rented">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/mercedes.jpg" alt="Mercedes C-Class" onerror="this.innerHTML='🏎️'">
+                    </div>
+                    <div>
+                      <div class="car-name">Mercedes C-Class</div>
+                      <div class="car-category">Luxury</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 345-678</td>
+                <td><span class="status-badge rented"><span class="dot"></span> Rented</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">Robert Taylor</div>
+                    <div>+27 84 567 1234</div>
+                  </div>
+                </td>
+                <td>Johannesburg — Sandton</td>
+                <td>2026-12-22</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Mercedes C-Class')">View</button>
+                  <button class="action-btn danger" onclick="markReturned('Mercedes C-Class')">Return</button>
+                </td>
+              </tr>
+
+              <!-- Row 12: Toyota Hilux - Reserved -->
+              <tr data-status="reserved">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/hilux.jpg" alt="Toyota Hilux" onerror="this.innerHTML='🚚'">
+                    </div>
+                    <div>
+                      <div class="car-name">Toyota Hilux</div>
+                      <div class="car-category">Bakkie</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 789-012</td>
+                <td><span class="status-badge reserved"><span class="dot"></span> Reserved</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">James Anderson</div>
+                    <div>+27 82 345 6789</div>
+                  </div>
+                </td>
+                <td>Richards Bay</td>
+                <td>2026-12-30</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Toyota Hilux')">View</button>
+                  <button class="action-btn" onclick="markRented('Toyota Hilux')">Start Rental</button>
+                </td>
+              </tr>
+
+              <!-- Row 13: Ford Figo - Available -->
+              <tr data-status="available">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/figo.jpg" alt="Ford Figo" onerror="this.innerHTML='🚘'">
+                    </div>
+                    <div>
+                      <div class="car-name">Ford Figo</div>
+                      <div class="car-category">Family</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 901-234</td>
+                <td><span class="status-badge available"><span class="dot"></span> Available</span></td>
+                <td>—</td>
+                <td>Cape Town — Tygervalley</td>
+                <td>—</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('Ford Figo')">View</button>
+                  <button class="action-btn" onclick="markReserved('Ford Figo')">Reserve</button>
+                </td>
+              </tr>
+
+              <!-- Row 14: VW Transporter - Rented -->
+              <tr data-status="rented">
+                <td>
+                  <div class="car-cell">
+                    <div class="car-thumb">
+                      <img src="images/transporter.jpg" alt="VW Transporter" onerror="this.innerHTML='🚐'">
+                    </div>
+                    <div>
+                      <div class="car-name">VW Transporter</div>
+                      <div class="car-category">Van</div>
+                    </div>
+                  </div>
+                </td>
+                <td>CA 234-567</td>
+                <td><span class="status-badge rented"><span class="dot"></span> Rented</span></td>
+                <td>
+                  <div class="customer-info">
+                    <div class="name">Lisa Martin</div>
+                    <div>+27 83 456 7890</div>
+                  </div>
+                </td>
+                <td>Durban — Springfield</td>
+                <td>2026-12-19</td>
+                <td>
+                  <button class="action-btn" onclick="showVehicleDetails('VW Transporter')">View</button>
+                  <button class="action-btn danger" onclick="markReturned('VW Transporter')">Return</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="images/logo.jpg" alt="Wonkerh's" style="height:28px; width:auto;" onerror="this.style.display='none'">
+          Wonkerh's<span>·</span>Car&nbsp;Hire
+        </div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram" class="social-link ig-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="5"/>
+              <circle cx="17.5" cy="6.5" r="1.5"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="X (Twitter)" class="social-link x-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="WhatsApp" class="social-link wa-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+  <span id="toastMessage">Action completed successfully!</span>
+</div>
+
+<script src="assets/script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // ---------- Toast ----------
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    let toastTimeout;
+
+    function showToast(message, type = 'success') {
+      toast.className = 'toast ' + type;
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // ---------- Filter Functions ----------
+    function filterTable(status) {
+      const rows = document.querySelectorAll('#fleetTableBody tr');
+      let visibleCount = 0;
+      
+      rows.forEach(row => {
+        if (status === 'all' || row.dataset.status === status) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      // Update counts
+      updateStats();
+      return visibleCount;
+    }
+
+    // ---------- Update Stats ----------
+    function updateStats() {
+      const rows = document.querySelectorAll('#fleetTableBody tr');
+      const stats = {
+        available: 0,
+        rented: 0,
+        reserved: 0,
+        maintenance: 0,
+        overdue: 0,
+        total: 0
+      };
+
+      rows.forEach(row => {
+        const status = row.dataset.status;
+        if (stats[status] !== undefined) {
+          stats[status]++;
+          stats.total++;
+        }
+      });
+
+      // Update sidebar badges
+      document.querySelectorAll('.sidebar-nav .badge-count').forEach(badge => {
+        const parent = badge.closest('a');
+        if (parent) {
+          const filter = parent.dataset.filter;
+          if (filter === 'all') {
+            badge.textContent = stats.total;
+          } else if (stats[filter] !== undefined) {
+            badge.textContent = stats[filter];
+          }
+        }
+      });
+
+      // Update stat cards
+      document.querySelectorAll('.stat-mini').forEach(card => {
+        const label = card.querySelector('.stat-label')?.textContent?.toLowerCase() || '';
+        const numberEl = card.querySelector('.stat-number');
+        if (label.includes('available') && stats.available !== undefined) {
+          numberEl.textContent = stats.available;
+        } else if (label.includes('rented') && stats.rented !== undefined) {
+          numberEl.textContent = stats.rented;
+        } else if (label.includes('reserved') && stats.reserved !== undefined) {
+          numberEl.textContent = stats.reserved;
+        } else if (label.includes('maintenance') && stats.maintenance !== undefined) {
+          numberEl.textContent = stats.maintenance;
+        } else if (label.includes('overdue') && stats.overdue !== undefined) {
+          numberEl.textContent = stats.overdue;
+        }
+      });
+    }
+
+    // ---------- Sidebar Navigation ----------
+    document.querySelectorAll('.sidebar-nav a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const filter = this.dataset.filter;
+        
+        // Update active state
+        document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter table
+        filterTable(filter);
+        showToast(`Showing ${filter} vehicles`, 'info');
+      });
+    });
+
+    // ---------- Toolbar Filter Buttons ----------
+    document.querySelectorAll('.filter-group button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.dataset.filter;
+        
+        // Update active state
+        document.querySelectorAll('.filter-group button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter table
+        filterTable(filter);
+        showToast(`Filtering: ${filter}`, 'info');
+      });
+    });
+
+    // ---------- Search Function ----------
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#fleetTableBody tr');
+      
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+      });
+    });
+
+    // ---------- Refresh Button ----------
+    document.getElementById('refreshBtn').addEventListener('click', function() {
+      const icon = this.querySelector('svg');
+      icon.style.animation = 'spin 0.8s linear';
+      showToast('Refreshing fleet data...', 'info');
+      
+      setTimeout(() => {
+        icon.style.animation = '';
+        updateStats();
+        showToast('Fleet data refreshed!', 'success');
+      }, 1000);
+    });
+
+    // ---------- Vehicle Actions ----------
+    window.showVehicleDetails = function(carName) {
+      showToast(`📋 Loading details for ${carName}...`, 'info');
+    };
+
+    window.markReturned = function(carName) {
+      if (confirm(`Mark ${carName} as returned?`)) {
+        const row = document.querySelector(`#fleetTableBody tr:has(.car-name:contains("${carName}"))`);
+        if (row) {
+          row.dataset.status = 'available';
+          const statusCell = row.querySelector('.status-badge');
+          statusCell.className = 'status-badge available';
+          statusCell.innerHTML = '<span class="dot"></span> Available';
+          
+          // Update return date
+          const returnDateCell = row.querySelectorAll('td')[5];
+          returnDateCell.textContent = '—';
+          
+          // Update customer
+          const customerCell = row.querySelectorAll('td')[3];
+          customerCell.textContent = '—';
+          
+          // Update actions
+          const actionsCell = row.querySelectorAll('td')[6];
+          actionsCell.innerHTML = `
+            <button class="action-btn" onclick="showVehicleDetails('${carName}')">View</button>
+            <button class="action-btn" onclick="markReserved('${carName}')">Reserve</button>
+          `;
+          
+          updateStats();
+          showToast(`✅ ${carName} marked as returned`, 'success');
+        }
+      }
+    };
+
+    window.markReserved = function(carName) {
+      const customer = prompt(`Enter customer name for ${carName}:`);
+      if (customer && customer.trim()) {
+        const row = document.querySelector(`#fleetTableBody tr:has(.car-name:contains("${carName}"))`);
+        if (row) {
+          row.dataset.status = 'reserved';
+          const statusCell = row.querySelector('.status-badge');
+          statusCell.className = 'status-badge reserved';
+          statusCell.innerHTML = '<span class="dot"></span> Reserved';
+          
+          // Update customer
+          const customerCell = row.querySelectorAll('td')[3];
+          customerCell.innerHTML = `
+            <div class="customer-info">
+              <div class="name">${customer.trim()}</div>
+              <div>Awaiting contact</div>
+            </div>
+          `;
+          
+          // Update return date
+          const returnDateCell = row.querySelectorAll('td')[5];
+          const futureDate = new Date();
+          futureDate.setDate(futureDate.getDate() + 7);
+          returnDateCell.textContent = futureDate.toISOString().split('T')[0];
+          
+          // Update actions
+          const actionsCell = row.querySelectorAll('td')[6];
+          actionsCell.innerHTML = `
+            <button class="action-btn" onclick="showVehicleDetails('${carName}')">View</button>
+            <button class="action-btn" onclick="markRented('${carName}')">Start Rental</button>
+          `;
+          
+          updateStats();
+          showToast(`📅 ${carName} reserved for ${customer.trim()}`, 'success');
+        }
+      }
+    };
+
+    window.markRented = function(carName) {
+      if (confirm(`Start rental for ${carName}?`)) {
+        const row = document.querySelector(`#fleetTableBody tr:has(.car-name:contains("${carName}"))`);
+        if (row) {
+          row.dataset.status = 'rented';
+          const statusCell = row.querySelector('.status-badge');
+          statusCell.className = 'status-badge rented';
+          statusCell.innerHTML = '<span class="dot"></span> Rented';
+          
+          // Update actions
+          const actionsCell = row.querySelectorAll('td')[6];
+          actionsCell.innerHTML = `
+            <button class="action-btn" onclick="showVehicleDetails('${carName}')">View</button>
+            <button class="action-btn danger" onclick="markReturned('${carName}')">Return</button>
+          `;
+          
+          updateStats();
+          showToast(`🚗 ${carName} rental started`, 'success');
+        }
+      }
+    };
+
+    window.markAvailable = function(carName) {
+      if (confirm(`Mark ${carName} as available?`)) {
+        const row = document.querySelector(`#fleetTableBody tr:has(.car-name:contains("${carName}"))`);
+        if (row) {
+          row.dataset.status = 'available';
+          const statusCell = row.querySelector('.status-badge');
+          statusCell.className = 'status-badge available';
+          statusCell.innerHTML = '<span class="dot"></span> Available';
+          
+          // Update actions
+          const actionsCell = row.querySelectorAll('td')[6];
+          actionsCell.innerHTML = `
+            <button class="action-btn" onclick="showVehicleDetails('${carName}')">View</button>
+            <button class="action-btn" onclick="markReserved('${carName}')">Reserve</button>
+          `;
+          
+          updateStats();
+          showToast(`✅ ${carName} marked as available`, 'success');
+        }
+      }
+    };
+
+    // Add contains selector polyfill for older browsers
+    if (!Element.prototype.matches || !Element.prototype.closest) {
+      window.contains = function(selector, text) {
+        const elements = document.querySelectorAll(selector);
+        return Array.from(elements).find(el => el.textContent.includes(text));
+      };
+    }
+
+    // Add spin animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initial stats update
+    updateStats();
+    console.log('Fleet Monitor loaded successfully!');
+  });
+</script>
+</body>
+</html>

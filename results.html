@@ -5,12 +5,363 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Available Cars — Wonkerh's Car Hire</title>
 <link rel="stylesheet" href="assets/style.css">
+<style>
+  /* ---------- Results Page Styles ---------- */
+  .vehicle-card .thumb {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+    background: #F4F6F8;
+  }
+  .vehicle-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .vehicle-card:hover .thumb img {
+    transform: scale(1.05);
+  }
+  .vehicle-card .thumb .tag-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: var(--ink);
+    padding: 4px 12px;
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 2;
+  }
+  .vehicle-card .thumb .price-flag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    color: var(--paper);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 2;
+  }
+  .vehicle-card .thumb .price-flag span {
+    color: var(--amber);
+  }
+
+  .vehicle-card .body {
+    padding: 16px 18px 20px;
+  }
+  .vehicle-card .tag {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--route);
+    background: #E9F3F1;
+    padding: 2px 10px;
+    border-radius: 999px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .vehicle-card h3 {
+    font-size: 17px;
+    margin-bottom: 4px;
+  }
+  .vehicle-card .specs {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin: 8px 0 14px;
+  }
+  .vehicle-card .specs span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .vehicle-card .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .vehicle-card .price {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 20px;
+  }
+  .vehicle-card .price small {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-faint);
+  }
+  .vehicle-card .select-btn {
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: none;
+    background: var(--primary-gradient);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .vehicle-card .select-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  }
+
+  /* ---------- Booking Modal ---------- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-overlay .modal {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal-overlay .modal .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--ink-faint);
+    transition: color var(--transition);
+  }
+  .modal-overlay .modal .close-btn:hover {
+    color: var(--ink);
+  }
+  .modal-overlay .modal h2 {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+  .modal-overlay .modal .modal-subtitle {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .modal-overlay .modal .modal-car-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background: var(--gray-50);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    border: 1px solid var(--paper-line);
+  }
+  .modal-overlay .modal .modal-car-info .car-icon {
+    font-size: 32px;
+  }
+  .modal-overlay .modal .modal-car-info .car-details h4 {
+    font-size: 16px;
+  }
+  .modal-overlay .modal .modal-car-info .car-details p {
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  /* Form Sections */
+  .form-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .form-section .section-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-section .section-title .step {
+    background: var(--primary-gradient);
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .form-row.three-col {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 12px;
+    border: 2px solid var(--paper-line);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: all var(--transition);
+    background: var(--gray-50);
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    background: #fff;
+  }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  .form-group .hint {
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .form-group .required {
+    color: #EF4444;
+    margin-left: 2px;
+  }
+  .form-group .pre-filled {
+    background: var(--gray-100);
+    color: var(--ink-soft);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--paper-line);
+  }
+  .form-actions .btn {
+    flex: 1;
+  }
+  .form-actions .btn-secondary {
+    background: var(--gray-100);
+    color: var(--ink-soft);
+    border: none;
+  }
+  .form-actions .btn-secondary:hover {
+    background: var(--gray-200);
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--gray-900);
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 400px;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .toast.success {
+    border-left: 4px solid #10B981;
+  }
+  .toast.error {
+    border-left: 4px solid #EF4444;
+  }
+  .toast.info {
+    border-left: 4px solid var(--primary);
+  }
+
+  /* Responsive */
+  @media (max-width: 820px) {
+    .form-row,
+    .form-row.three-col {
+      grid-template-columns: 1fr;
+    }
+    .modal-overlay .modal {
+      padding: 24px 20px;
+    }
+    .results-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    .modal-overlay .modal {
+      padding: 16px;
+    }
+    .form-actions {
+      flex-direction: column;
+    }
+  }
+</style>
 </head>
 <body>
 
 <header class="site">
   <div class="nav-row">
-    <a href="index.html" class="logo">Wonkerh's<span>·</span>Car&nbsp;Hire</a>
+    <a href="index.html" class="logo">
+      <img src="images/logo.jpg" alt="Wonkerh's" style="height:32px; width:auto;" onerror="this.style.display='none'">
+      Wonkerh's<span>·</span>Car&nbsp;Hire
+    </a>
     <nav class="main-nav">
       <ul>
         <li><a href="vehicles.html">Fleet</a></li>
@@ -23,7 +374,7 @@
     </nav>
     <div class="nav-right">
       <a href="login.html" class="nav-phone">Login</a>
-      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <a href="results.html" class="btn btn-primary btn-sm">Book Now</a>
       <button class="burger" aria-label="Menu">&#9776;</button>
     </div>
   </div>
@@ -58,7 +409,7 @@
         </div>
         <div class="search-field">
           <label for="pickup-date">Pick-up date</label>
-          <input type="date" id="pickup-date" name="pickup-date">
+          <input type="date" id="pickup-date" name="pickup-date" value="2026-12-15">
         </div>
         <div class="search-field">
           <label for="dropoff-branch">Drop-off branch</label>
@@ -70,7 +421,7 @@
         </div>
         <div class="search-field">
           <label for="dropoff-date">Drop-off date</label>
-          <input type="date" id="dropoff-date" name="dropoff-date">
+          <input type="date" id="dropoff-date" name="dropoff-date" value="2026-12-20">
         </div>
         <div class="search-submit">
           <button type="submit">Update Search</button>
@@ -103,77 +454,148 @@
         <div class="results-count">
           Showing 8 cars in <strong class="js-branch-label">Pietermaritzburg</strong>
         </div>
-        <div class="fleet-grid cols-3">
-          <div class="vehicle-card" data-category="mini">
-            <div class="thumb">🚙</div>
+        <div class="fleet-grid cols-3" id="resultsGrid">
+          <!-- Toyota Starlet -->
+          <div class="vehicle-card" data-category="mini" data-car="Toyota Starlet" data-price="349" data-image="starlet.jpg">
+            <div class="thumb">
+              <img src="images/starlet.jpg" alt="Toyota Starlet" loading="lazy" onerror="this.parentElement.innerHTML='🚙'">
+              <span class="tag-badge">Popular</span>
+              <div class="price-flag">From <span>R349</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">Mini</span>
               <h3>Toyota Starlet</h3>
               <div class="specs"><span>5 seats</span><span>Manual</span><span>A/C</span></div>
-              <div class="price-row"><span class="price">R349<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R349<small> / day</small></span>
+                <button class="select-btn" data-car="Toyota Starlet" data-price="349">Select</button>
+              </div>
             </div>
           </div>
-          <div class="vehicle-card" data-category="mini">
-            <div class="thumb">🚙</div>
+
+          <!-- Suzuki Swift -->
+          <div class="vehicle-card" data-category="mini" data-car="Suzuki Swift" data-price="399" data-image="swift.jpg">
+            <div class="thumb">
+              <img src="images/swift.jpg" alt="Suzuki Swift" loading="lazy" onerror="this.parentElement.innerHTML='🚙'">
+              <span class="tag-badge">Auto</span>
+              <div class="price-flag">From <span>R399</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">Mini</span>
               <h3>Suzuki Swift</h3>
               <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
-              <div class="price-row"><span class="price">R399<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R399<small> / day</small></span>
+                <button class="select-btn" data-car="Suzuki Swift" data-price="399">Select</button>
+              </div>
             </div>
           </div>
-          <div class="vehicle-card" data-category="family">
-            <div class="thumb">🚘</div>
+
+          <!-- Hyundai Grand i10 -->
+          <div class="vehicle-card" data-category="family" data-car="Hyundai Grand i10" data-price="529" data-image="i10.jpg">
+            <div class="thumb">
+              <img src="images/i10.jpg" alt="Hyundai Grand i10" loading="lazy" onerror="this.parentElement.innerHTML='🚘'">
+              <span class="tag-badge">Family</span>
+              <div class="price-flag">From <span>R529</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">Family</span>
               <h3>Hyundai Grand i10</h3>
               <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
-              <div class="price-row"><span class="price">R529<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R529<small> / day</small></span>
+                <button class="select-btn" data-car="Hyundai Grand i10" data-price="529">Select</button>
+              </div>
             </div>
           </div>
-          <div class="vehicle-card" data-category="family">
-            <div class="thumb">🚘</div>
+
+          <!-- Toyota Corolla -->
+          <div class="vehicle-card" data-category="family" data-car="Toyota Corolla" data-price="589" data-image="corolla.jpg">
+            <div class="thumb">
+              <img src="images/corolla.jpg" alt="Toyota Corolla" loading="lazy" onerror="this.parentElement.innerHTML='🚘'">
+              <span class="tag-badge">Best Seller</span>
+              <div class="price-flag">From <span>R589</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">Family</span>
               <h3>Toyota Corolla</h3>
               <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
-              <div class="price-row"><span class="price">R589<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R589<small> / day</small></span>
+                <button class="select-btn" data-car="Toyota Corolla" data-price="589">Select</button>
+              </div>
             </div>
           </div>
-          <div class="vehicle-card" data-category="suv">
-            <div class="thumb">🏔️</div>
+
+          <!-- Ford EcoSport -->
+          <div class="vehicle-card" data-category="suv" data-car="Ford EcoSport" data-price="749" data-image="ecosport.jpg">
+            <div class="thumb">
+              <img src="images/ecosport.jpg" alt="Ford EcoSport" loading="lazy" onerror="this.parentElement.innerHTML='🏔️'">
+              <span class="tag-badge">SUV</span>
+              <div class="price-flag">From <span>R749</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">SUV</span>
               <h3>Ford EcoSport</h3>
               <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
-              <div class="price-row"><span class="price">R749<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R749<small> / day</small></span>
+                <button class="select-btn" data-car="Ford EcoSport" data-price="749">Select</button>
+              </div>
             </div>
           </div>
-          <div class="vehicle-card" data-category="suv">
-            <div class="thumb">🏔️</div>
+
+          <!-- Hyundai Creta -->
+          <div class="vehicle-card" data-category="suv" data-car="Hyundai Creta" data-price="829" data-image="creta.jpg">
+            <div class="thumb">
+              <img src="images/creta.jpg" alt="Hyundai Creta" loading="lazy" onerror="this.parentElement.innerHTML='🏔️'">
+              <span class="tag-badge">Premium</span>
+              <div class="price-flag">From <span>R829</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">SUV</span>
               <h3>Hyundai Creta</h3>
               <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
-              <div class="price-row"><span class="price">R829<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R829<small> / day</small></span>
+                <button class="select-btn" data-car="Hyundai Creta" data-price="829">Select</button>
+              </div>
             </div>
           </div>
-          <div class="vehicle-card" data-category="group">
-            <div class="thumb">🚐</div>
+
+          <!-- Toyota Quantum -->
+          <div class="vehicle-card" data-category="group" data-car="Toyota Quantum" data-price="899" data-image="quantum.jpg">
+            <div class="thumb">
+              <img src="images/quantum.jpg" alt="Toyota Quantum" loading="lazy" onerror="this.parentElement.innerHTML='🚐'">
+              <span class="tag-badge">10-Seater</span>
+              <div class="price-flag">From <span>R899</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">Group</span>
               <h3>Toyota Quantum</h3>
               <div class="specs"><span>10 seats</span><span>Manual</span><span>A/C</span></div>
-              <div class="price-row"><span class="price">R899<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R899<small> / day</small></span>
+                <button class="select-btn" data-car="Toyota Quantum" data-price="899">Select</button>
+              </div>
             </div>
           </div>
-          <div class="vehicle-card" data-category="luxury">
-            <div class="thumb">🏎️</div>
+
+          <!-- BMW 3 Series -->
+          <div class="vehicle-card" data-category="luxury" data-car="BMW 3 Series" data-price="1349" data-image="bmw.jpg">
+            <div class="thumb">
+              <img src="images/bmw.jpg" alt="BMW 3 Series" loading="lazy" onerror="this.parentElement.innerHTML='🏎️'">
+              <span class="tag-badge">Premium</span>
+              <div class="price-flag">From <span>R1349</span>/day</div>
+            </div>
             <div class="body">
               <span class="tag">Luxury</span>
               <h3>BMW 3 Series</h3>
               <div class="specs"><span>5 seats</span><span>Auto</span><span>Leather</span></div>
-              <div class="price-row"><span class="price">R1349<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+              <div class="price-row">
+                <span class="price">R1349<small> / day</small></span>
+                <button class="select-btn" data-car="BMW 3 Series" data-price="1349">Select</button>
+              </div>
             </div>
           </div>
         </div>
@@ -182,16 +604,271 @@
   </div>
 </section>
 
+<!-- Booking Modal -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="close-btn" id="closeModal">&times;</button>
+    <h2 id="modalTitle">Complete Your Booking</h2>
+    <p class="modal-subtitle">Please provide the required information to confirm your rental.</p>
+
+    <div class="modal-car-info" id="modalCarInfo">
+      <div class="car-icon" id="modalCarIcon">🚗</div>
+      <div class="car-details">
+        <h4 id="modalCarName">Toyota Corolla</h4>
+        <p id="modalCarPrice">R589 / day</p>
+      </div>
+    </div>
+
+    <form id="bookingForm">
+      <!-- Section 1: Personal & Contact Information -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step">1</span> Personal & Contact Information
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" id="fullName" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address <span class="required">*</span></label>
+            <input type="email" id="email" placeholder="john@example.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number <span class="required">*</span></label>
+            <input type="tel" id="phone" placeholder="+27 82 123 4567" required>
+          </div>
+          <div class="form-group">
+            <label>Residential Address <span class="required">*</span></label>
+            <input type="text" id="address" placeholder="123 Main St, Pietermaritzburg" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Emergency Contact Name</label>
+            <input type="text" id="emergencyName" placeholder="Jane Doe">
+          </div>
+          <div class="form-group">
+            <label>Emergency Contact Phone</label>
+            <input type="tel" id="emergencyPhone" placeholder="+27 82 765 4321">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Driver Verification -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step">2</span> Driver Verification
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Driver's License Number <span class="required">*</span></label>
+            <input type="text" id="licenseNumber" placeholder="DL123456789" required>
+          </div>
+          <div class="form-group">
+            <label>License Expiry Date <span class="required">*</span></label>
+            <input type="date" id="licenseExpiry" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>License Issuance Country <span class="required">*</span></label>
+            <select id="licenseCountry" required>
+              <option value="">Select Country</option>
+              <option value="South Africa">South Africa</option>
+              <option value="Zimbabwe">Zimbabwe</option>
+              <option value="Botswana">Botswana</option>
+              <option value="Namibia">Namibia</option>
+              <option value="Mozambique">Mozambique</option>
+              <option value="UK">United Kingdom</option>
+              <option value="USA">United States</option>
+              <option value="Germany">Germany</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date of Birth <span class="required">*</span></label>
+            <input type="date" id="dob" required>
+            <span class="hint">Must be 21+ for standard vehicles, 25+ for luxury/SUV</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ID/Passport Number <span class="required">*</span></label>
+            <input type="text" id="idNumber" placeholder="SA1234567890" required>
+          </div>
+          <div class="form-group">
+            <label>ID/Passport Issuance Country</label>
+            <select id="idCountry">
+              <option value="">Select Country</option>
+              <option value="South Africa">South Africa</option>
+              <option value="Zimbabwe">Zimbabwe</option>
+              <option value="Botswana">Botswana</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Payment Data -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step">3</span> Payment Information
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Card Number <span class="required">*</span></label>
+            <input type="text" id="cardNumber" placeholder="**** **** **** ****" required>
+          </div>
+          <div class="form-group">
+            <label>Cardholder Name <span class="required">*</span></label>
+            <input type="text" id="cardName" placeholder="John Doe" required>
+          </div>
+        </div>
+        <div class="form-row three-col">
+          <div class="form-group">
+            <label>Expiry Date <span class="required">*</span></label>
+            <input type="month" id="cardExpiry" required>
+          </div>
+          <div class="form-group">
+            <label>CVV <span class="required">*</span></label>
+            <input type="password" id="cardCvv" placeholder="***" maxlength="4" required>
+          </div>
+          <div class="form-group">
+            <label>Deposit Amount</label>
+            <input type="text" id="depositAmount" value="R 2,000" disabled class="pre-filled">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Booking Details -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step">4</span> Rental Logistics
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pick-up Branch <span class="required">*</span></label>
+            <select id="bookPickupBranch" required>
+              <option>Pietermaritzburg</option>
+              <option>Durban — King Shaka</option>
+              <option>Durban — Springfield</option>
+              <option>Johannesburg — OR Tambo</option>
+              <option>Cape Town — Airport</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Drop-off Branch <span class="required">*</span></label>
+            <select id="bookDropoffBranch" required>
+              <option>Same as pick-up</option>
+              <option>Pietermaritzburg</option>
+              <option>Durban — King Shaka</option>
+              <option>Johannesburg — OR Tambo</option>
+              <option>Cape Town — Airport</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pick-up Date <span class="required">*</span></label>
+            <input type="date" id="bookPickupDate" required>
+          </div>
+          <div class="form-group">
+            <label>Drop-off Date <span class="required">*</span></label>
+            <input type="date" id="bookDropoffDate" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Additional Drivers</label>
+            <input type="text" id="additionalDrivers" placeholder="Names of additional drivers (if any)">
+          </div>
+          <div class="form-group">
+            <label>Add-ons</label>
+            <select id="addons">
+              <option>None</option>
+              <option>Child Seat</option>
+              <option>GPS Navigation</option>
+              <option>Child Seat + GPS</option>
+              <option>Additional Insurance</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Special Requests</label>
+          <textarea id="specialRequests" placeholder="Any special requirements..."></textarea>
+        </div>
+      </div>
+
+      <!-- Section 5: Terms -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="step">5</span> Terms &amp; Confirmation
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:12px;">
+          <input type="checkbox" id="termsCheck" required style="margin-top:3px;">
+          <label for="termsCheck" style="font-size:13px; color:var(--ink-soft);">
+            I confirm that all information provided is accurate and complete. I agree to the 
+            <a href="faq.html#terms" style="color:var(--primary); text-decoration:underline;">Terms &amp; Conditions</a> 
+            and authorize the deposit hold on my card.
+          </label>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <input type="checkbox" id="telematicsCheck" required style="margin-top:3px;">
+          <label for="telematicsCheck" style="font-size:13px; color:var(--ink-soft);">
+            I acknowledge that the vehicle may be equipped with GPS tracking and telematics for security and operational purposes.
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="cancelBooking">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="confirmBooking">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          Confirm Booking
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+  <span id="toastMessage">Action completed successfully!</span>
+</div>
+
 <footer class="site">
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <div class="footer-logo">Wonkerh's<span>·</span>Car&nbsp;Hire</div>
+        <div class="footer-logo">
+          <img src="images/logo.jpg" alt="Wonkerh's" style="height:28px; width:auto;" onerror="this.style.display='none'">
+          Wonkerh's<span>·</span>Car&nbsp;Hire
+        </div>
         <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
         <div class="social-row" style="margin-top:18px;">
-          <a href="#" aria-label="Instagram">IG</a>
-          <a href="#" aria-label="X">X</a>
-          <a href="#" aria-label="WhatsApp">WA</a>
+          <a href="#" aria-label="Instagram" class="social-link ig-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="5"/>
+              <circle cx="17.5" cy="6.5" r="1.5"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="X (Twitter)" class="social-link x-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="#" aria-label="WhatsApp" class="social-link wa-link">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div>
@@ -227,5 +904,279 @@
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // ---------- State ----------
+    let selectedCar = null;
+    let bookingData = {};
+
+    // ---------- Toast ----------
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    let toastTimeout;
+
+    function showToast(message, type = 'success') {
+      toast.className = 'toast ' + type;
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // ---------- Modal ----------
+    const modal = document.getElementById('bookingModal');
+    const closeBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBooking');
+    const modalCarName = document.getElementById('modalCarName');
+    const modalCarPrice = document.getElementById('modalCarPrice');
+    const modalCarIcon = document.getElementById('modalCarIcon');
+
+    // Open modal
+    document.querySelectorAll('.select-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const car = this.dataset.car;
+        const price = this.dataset.price;
+        selectedCar = { name: car, price: price };
+        
+        // Update modal
+        modalCarName.textContent = car;
+        modalCarPrice.textContent = `R${price} / day`;
+        modalCarIcon.textContent = this.closest('.vehicle-card').querySelector('.thumb img') ? '🚗' : '🚗';
+        
+        // Pre-fill dates from search
+        const pickupDate = document.getElementById('pickup-date')?.value || '';
+        const dropoffDate = document.getElementById('dropoff-date')?.value || '';
+        if (pickupDate) document.getElementById('bookPickupDate').value = pickupDate;
+        if (dropoffDate) document.getElementById('bookDropoffDate').value = dropoffDate;
+        
+        // Pre-fill branches from search
+        const pickupBranch = document.getElementById('pickup-branch')?.value || '';
+        const dropoffBranch = document.getElementById('dropoff-branch')?.value || '';
+        if (pickupBranch) document.getElementById('bookPickupBranch').value = pickupBranch;
+        if (dropoffBranch && dropoffBranch !== 'Same as pick-up') {
+          document.getElementById('bookDropoffBranch').value = dropoffBranch;
+        }
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close modal
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // ---------- Form Submission ----------
+    const bookingForm = document.getElementById('bookingForm');
+    
+    bookingForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Collect all data
+      bookingData = {
+        personal: {
+          fullName: document.getElementById('fullName').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          address: document.getElementById('address').value,
+          emergencyName: document.getElementById('emergencyName').value,
+          emergencyPhone: document.getElementById('emergencyPhone').value
+        },
+        driver: {
+          licenseNumber: document.getElementById('licenseNumber').value,
+          licenseExpiry: document.getElementById('licenseExpiry').value,
+          licenseCountry: document.getElementById('licenseCountry').value,
+          dob: document.getElementById('dob').value,
+          idNumber: document.getElementById('idNumber').value,
+          idCountry: document.getElementById('idCountry').value
+        },
+        payment: {
+          cardNumber: document.getElementById('cardNumber').value,
+          cardName: document.getElementById('cardName').value,
+          cardExpiry: document.getElementById('cardExpiry').value,
+          cardCvv: document.getElementById('cardCvv').value
+        },
+        booking: {
+          car: selectedCar,
+          pickupBranch: document.getElementById('bookPickupBranch').value,
+          dropoffBranch: document.getElementById('bookDropoffBranch').value,
+          pickupDate: document.getElementById('bookPickupDate').value,
+          dropoffDate: document.getElementById('bookDropoffDate').value,
+          additionalDrivers: document.getElementById('additionalDrivers').value,
+          addons: document.getElementById('addons').value,
+          specialRequests: document.getElementById('specialRequests').value
+        },
+        terms: {
+          termsAccepted: document.getElementById('termsCheck').checked,
+          telematicsAccepted: document.getElementById('telematicsCheck').checked
+        }
+      };
+
+      // Validate required fields
+      let isValid = true;
+      const required = ['fullName', 'email', 'phone', 'address', 'licenseNumber', 'licenseExpiry', 'licenseCountry', 'dob', 'idNumber', 'cardNumber', 'cardName', 'cardExpiry', 'cardCvv'];
+      const inputs = {
+        fullName: document.getElementById('fullName'),
+        email: document.getElementById('email'),
+        phone: document.getElementById('phone'),
+        address: document.getElementById('address'),
+        licenseNumber: document.getElementById('licenseNumber'),
+        licenseExpiry: document.getElementById('licenseExpiry'),
+        licenseCountry: document.getElementById('licenseCountry'),
+        dob: document.getElementById('dob'),
+        idNumber: document.getElementById('idNumber'),
+        cardNumber: document.getElementById('cardNumber'),
+        cardName: document.getElementById('cardName'),
+        cardExpiry: document.getElementById('cardExpiry'),
+        cardCvv: document.getElementById('cardCvv')
+      };
+
+      required.forEach(field => {
+        const input = inputs[field];
+        if (!input.value || input.value.trim() === '') {
+          input.style.borderColor = '#EF4444';
+          input.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1)';
+          isValid = false;
+        } else {
+          input.style.borderColor = '';
+          input.style.boxShadow = '';
+        }
+      });
+
+      if (!document.getElementById('termsCheck').checked) {
+        document.getElementById('termsCheck').style.outline = '2px solid #EF4444';
+        isValid = false;
+      } else {
+        document.getElementById('termsCheck').style.outline = '';
+      }
+
+      if (!document.getElementById('telematicsCheck').checked) {
+        document.getElementById('telematicsCheck').style.outline = '2px solid #EF4444';
+        isValid = false;
+      } else {
+        document.getElementById('telematicsCheck').style.outline = '';
+      }
+
+      if (!isValid) {
+        showToast('Please fill in all required fields', 'error');
+        return;
+      }
+
+      // Show loading state
+      const submitBtn = document.getElementById('confirmBooking');
+      const originalHTML = submitBtn.innerHTML;
+      submitBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2.5" style="animation: spin 1s linear infinite;">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2a10 10 0 0110 10"/>
+        </svg>
+        Processing...
+      `;
+      submitBtn.disabled = true;
+
+      // Simulate processing
+      setTimeout(() => {
+        // Store in session
+        sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
+        sessionStorage.setItem('selectedCar', JSON.stringify(selectedCar));
+
+        showToast('🎉 Booking confirmed for ' + selectedCar.name + '!', 'success');
+        
+        // Close modal after delay
+        setTimeout(() => {
+          closeModal();
+          submitBtn.innerHTML = originalHTML;
+          submitBtn.disabled = false;
+          // Reset form
+          bookingForm.reset();
+          // Update results count
+          const countEl = document.querySelector('.results-count strong');
+          if (countEl) {
+            countEl.textContent = 'Pietermaritzburg (Booking Confirmed)';
+          }
+          // Redirect to dashboard after 2 seconds
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+        }, 1500);
+      }, 1500);
+    });
+
+    // Clear errors on input
+    document.querySelectorAll('#bookingForm input, #bookingForm select').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.borderColor = '';
+        this.style.boxShadow = '';
+      });
+    });
+
+    // Add spin animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // ---------- Filter Functionality ----------
+    const filterCheckboxes = document.querySelectorAll('.js-result-filter');
+    const resultCards = document.querySelectorAll('.vehicle-card');
+
+    filterCheckboxes.forEach(cb => {
+      cb.addEventListener('change', function() {
+        const checked = Array.from(filterCheckboxes)
+          .filter(c => c.checked)
+          .map(c => c.dataset.cat);
+        
+        resultCards.forEach(card => {
+          const cat = card.dataset.category;
+          if (checked.length === 0 || checked.includes(cat)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // ---------- Search Form ----------
+    document.querySelector('.js-search-form')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const branch = document.getElementById('pickup-branch').value;
+      const countEl = document.querySelector('.results-count strong');
+      if (countEl) {
+        countEl.textContent = branch;
+      }
+      showToast('Search updated for ' + branch, 'info');
+    });
+
+    // ---------- Load from session if coming from dashboard ----------
+    const savedData = sessionStorage.getItem('bookingData');
+    if (savedData) {
+      const data = JSON.parse(savedData);
+      // Pre-fill form with saved data
+      if (data.personal) {
+        document.getElementById('fullName').value = data.personal.fullName || '';
+        document.getElementById('email').value = data.personal.email || '';
+        document.getElementById('phone').value = data.personal.phone || '';
+        document.getElementById('address').value = data.personal.address || '';
+      }
+    }
+
+    console.log('Results page loaded successfully!');
+  });
+</script>
 </body>
 </html>
