@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Branches — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .province-block{ margin-bottom:56px; }
+  .province-block:last-child{ margin-bottom:0; }
+  .province-title{ font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:var(--route); margin-bottom:18px; }
+  .province-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:960px){ .province-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:640px){ .province-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">Wonkerh's<span>·</span>Car&nbsp;Hire</a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html">Fleet</a></li>
+        <li><a href="branches.html" class="active">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="login.html" class="nav-phone">Login</a>
+      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="wrap in">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Branches</div>
+    <h1>Twelve pickup points, one standard</h1>
+    <p>Every branch runs the same clean-car, honest-price promise — whether you're collecting from our Pietermaritzburg HQ or an airport counter.</p>
+  </div>
+  <div class="route-strip"></div>
+</div>
+
+<section>
+  <div class="wrap">
+
+    <div class="province-block">
+      <div class="province-title">KwaZulu-Natal</div>
+      <div class="province-grid">
+        <div class="branch-card-light">
+          <span class="province">Headquarters</span>
+          <h3>Pietermaritzburg</h3>
+          <dl>
+            <dt>Address</dt><dd>14 Chapel Street, Scottsville</dd>
+            <dt>Hours</dt><dd>Mon–Sat 07:00–18:00</dd>
+            <dt>Phone</dt><dd>0860 999 500</dd>
+          </dl>
+        </div>
+        <div class="branch-card-light">
+          <span class="province">Airport</span>
+          <h3>Durban — King Shaka</h3>
+          <dl>
+            <dt>Address</dt><dd>Arrivals Hall, King Shaka Intl.</dd>
+            <dt>Hours</dt><dd>Daily 06:00–22:00</dd>
+            <dt>Phone</dt><dd>0860 999 501</dd>
+          </dl>
+        </div>
+        <div class="branch-card-light">
+          <span class="province">City</span>
+          <h3>Durban — Springfield</h3>
+          <dl>
+            <dt>Address</dt><dd>22 Intersite Ave, Springfield</dd>
+            <dt>Hours</dt><dd>Mon–Sat 07:00–18:00</dd>
+            <dt>Phone</dt><dd>0860 999 502</dd>
+          </dl>
+        </div>
+        <div class="branch-card-light">
+          <span class="province">City</span>
+          <h3>Richards Bay</h3>
+          <dl>
+            <dt>Address</dt><dd>9 John Ross Highway</dd>
+            <dt>Hours</dt><dd>Mon–Fri 07:30–17:00</dd>
+            <dt>Phone</dt><dd>0860 999 503</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="province-block">
+      <div class="province-title">Gauteng</div>
+      <div class="province-grid">
+        <div class="branch-card-light">
+          <span class="province">Airport</span>
+          <h3>Johannesburg — OR Tambo</h3>
+          <dl>
+            <dt>Address</dt><dd>Rental Car Village, OR Tambo</dd>
+            <dt>Hours</dt><dd>Daily 05:00–23:00</dd>
+            <dt>Phone</dt><dd>0860 999 504</dd>
+          </dl>
+        </div>
+        <div class="branch-card-light">
+          <span class="province">City</span>
+          <h3>Johannesburg — Sandton</h3>
+          <dl>
+            <dt>Address</dt><dd>88 Rivonia Road, Sandton</dd>
+            <dt>Hours</dt><dd>Mon–Sat 07:00–18:00</dd>
+            <dt>Phone</dt><dd>0860 999 505</dd>
+          </dl>
+        </div>
+        <div class="branch-card-light">
+          <span class="province">City</span>
+          <h3>Pretoria — Hatfield</h3>
+          <dl>
+            <dt>Address</dt><dd>Burnett St, Hatfield</dd>
+            <dt>Hours</dt><dd>Mon–Sat 08:00–17:00</dd>
+            <dt>Phone</dt><dd>0860 999 506</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="province-block">
+      <div class="province-title">Western Cape</div>
+      <div class="province-grid">
+        <div class="branch-card-light">
+          <span class="province">Airport</span>
+          <h3>Cape Town — Airport</h3>
+          <dl>
+            <dt>Address</dt><dd>Rental Car Precinct, CPT</dd>
+            <dt>Hours</dt><dd>Daily 06:00–22:00</dd>
+            <dt>Phone</dt><dd>0860 999 507</dd>
+          </dl>
+        </div>
+        <div class="branch-card-light">
+          <span class="province">City</span>
+          <h3>Cape Town — City Bowl</h3>
+          <dl>
+            <dt>Address</dt><dd>44 Long Street</dd>
+            <dt>Hours</dt><dd>Mon–Sat 07:00–18:00</dd>
+            <dt>Phone</dt><dd>0860 999 508</dd>
+          </dl>
+        </div>
+        <div class="branch-card-light">
+          <span class="province">City</span>
+          <h3>Cape Town — Tygervalley</h3>
+          <dl>
+            <dt>Address</dt><dd>Willie van Schoor Ave</dd>
+            <dt>Hours</dt><dd>Mon–Sat 08:00–17:00</dd>
+            <dt>Phone</dt><dd>0860 999 509</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div class="wrap">
+    <h2>Don't see your city yet?</h2>
+    <a href="contact.html" class="btn btn-dark">Tell Us Where To Open Next</a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Wonkerh's<span>·</span>Car&nbsp;Hire</div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

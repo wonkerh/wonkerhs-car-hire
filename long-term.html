@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Long-Term Hire — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .plan-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:stretch; }
+  .plan-card{ background:#fff; border:1px solid var(--paper-line); border-radius:var(--radius); padding:28px; display:flex; flex-direction:column; }
+  .plan-card.featured{ border-color:var(--amber); box-shadow:var(--shadow-card); position:relative; }
+  .plan-card.featured .flag{ position:absolute; top:-12px; right:20px; background:var(--amber); color:var(--ink); font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px; text-transform:uppercase; }
+  .plan-card h3{ font-size:15px; font-family:'Inter',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-faint); }
+  .plan-card .amt{ font-family:'Archivo Black',sans-serif; font-size:38px; margin:12px 0 4px; }
+  .plan-card .amt span{ font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--ink-faint); }
+  .plan-card ul{ margin:20px 0 26px; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .plan-card li{ font-size:13.5px; display:flex; gap:8px; }
+  .plan-card li:before{ content:"✓"; color:var(--route); font-weight:800; }
+  @media (max-width:900px){ .plan-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">Wonkerh's<span>·</span>Car&nbsp;Hire</a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html" class="active">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <span class="nav-phone">📞 0860 999 500</span>
+      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="wrap in">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Long-Term</div>
+    <h1>A car for the whole semester — not just the weekend</h1>
+    <p>Monthly rates that undercut daily pricing, with servicing and roadside cover built in. Popular with students, interns, and remote workers who need wheels for months at a time.</p>
+  </div>
+  <div class="route-strip"></div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Monthly Plans</span>
+      <h2>Pick a term, lock in the rate</h2>
+      <p>All plans include one scheduled service, breakdown cover, and free swap to a different category once per term.</p>
+    </div>
+
+    <div class="plan-grid">
+      <div class="plan-card">
+        <h3>1 Month</h3>
+        <div class="amt">R6,499<span>/mo</span></div>
+        <p style="font-size:13px; color:var(--ink-faint);">Great for a single semester module or short-term contract.</p>
+        <ul>
+          <li>2,500km included</li>
+          <li>Comprehensive insurance</li>
+          <li>Free branch swap</li>
+          <li>24/7 roadside support</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline btn-block">Enquire</a>
+      </div>
+
+      <div class="plan-card featured">
+        <span class="flag">Most Popular</span>
+        <h3>3 Months</h3>
+        <div class="amt">R5,799<span>/mo</span></div>
+        <p style="font-size:13px; color:var(--ink-faint);">Covers a full academic term with room to breathe on mileage.</p>
+        <ul>
+          <li>3,500km / month included</li>
+          <li>Comprehensive insurance</li>
+          <li>One free category upgrade</li>
+          <li>Priority roadside response</li>
+          <li>Scheduled servicing included</li>
+        </ul>
+        <a href="contact.html" class="btn btn-amber btn-block">Enquire</a>
+      </div>
+
+      <div class="plan-card">
+        <h3>6+ Months</h3>
+        <div class="amt">R4,999<span>/mo</span></div>
+        <p style="font-size:13px; color:var(--ink-faint);">Our best rate — ideal for a full academic year or long placement.</p>
+        <ul>
+          <li>Unlimited mileage</li>
+          <li>Comprehensive insurance</li>
+          <li>Free category swap anytime</li>
+          <li>Dedicated account contact</li>
+          <li>All servicing included</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline btn-block">Enquire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Why Long-Term</span>
+      <h2>Cheaper than daily hire, simpler than buying</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-cell">
+        <span class="num">01</span>
+        <h3>No depreciation risk</h3>
+        <p>Return the car at the end of your term — no resale hassle, no maintenance surprises.</p>
+      </div>
+      <div class="why-cell">
+        <span class="num">02</span>
+        <h3>One flat monthly cost</h3>
+        <p>Insurance, servicing, and roadside cover are all bundled — budget once, not every month.</p>
+      </div>
+      <div class="why-cell">
+        <span class="num">03</span>
+        <h3>Swap if life changes</h3>
+        <p>Need a bigger car for a road trip home? Swap categories without breaking your contract.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div class="wrap">
+    <h2>Talk to us about a term that fits your semester</h2>
+    <a href="contact.html" class="btn btn-dark">Get a Custom Quote</a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Wonkerh's<span>·</span>Car&nbsp;Hire</div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

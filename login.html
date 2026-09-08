@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .auth-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:stretch; }
+  .auth-card{ background:#fff; border:1px solid var(--paper-line); border-radius:var(--radius); padding:36px; }
+  .auth-card h2{ font-size:22px; margin-bottom:22px; }
+  .auth-form{ display:flex; flex-direction:column; gap:16px; }
+  .auth-remember{ display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--ink-soft); }
+  .auth-promo{
+    border-radius:var(--radius); padding:36px; color:var(--paper);
+    background:linear-gradient(160deg, var(--ink) 0%, #22292D 100%);
+    display:flex; flex-direction:column; justify-content:center; gap:16px;
+  }
+  .auth-promo h2{ font-size:24px; color:var(--paper); }
+  .auth-promo p{ color:#C9CFCF; font-size:14.5px; }
+  @media (max-width:860px){ .auth-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">Wonkerh's<span>·</span>Car&nbsp;Hire</a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <span class="nav-phone">📞 0860 999 500</span>
+      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-head" style="padding:44px 0 40px;">
+  <div class="wrap in">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Login</div>
+    <h1 style="font-size:32px;">Welcome back</h1>
+    <p>Log in to manage bookings, or register to check out faster next time.</p>
+  </div>
+  <div class="route-strip"></div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="auth-grid">
+      <div class="auth-card">
+        <h2>Log in to your account</h2>
+        <form class="auth-form" onsubmit="return false;">
+          <div class="form-field">
+            <label for="l-email">Email address</label>
+            <input type="email" id="l-email" required>
+          </div>
+          <div class="form-field">
+            <label for="l-password">Password</label>
+            <input type="password" id="l-password" required>
+          </div>
+          <div class="auth-remember">
+            <input type="checkbox" id="l-remember">
+            <label for="l-remember">Remember me on this device</label>
+          </div>
+          <button type="submit" class="btn btn-amber btn-block">Log In</button>
+          <a href="#" style="text-align:center; font-size:13px; color:var(--ink-soft);">Forgot your password?</a>
+        </form>
+      </div>
+
+      <div class="auth-promo">
+        <span class="kicker" style="color:var(--amber);">New Here?</span>
+        <h2>Create a free account</h2>
+        <p>Save your details for faster checkout, track upcoming rentals, and get first access to seasonal rates on the routes you drive most.</p>
+        <a href="#" class="btn btn-outline-light" style="align-self:flex-start;">Register Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Wonkerh's<span>·</span>Car&nbsp;Hire</div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

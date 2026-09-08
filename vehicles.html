@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Fleet — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .vehicle-card .thumb {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background: #F4F6F8;
+  }
+  .vehicle-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .vehicle-card:hover .thumb img {
+    transform: scale(1.05);
+  }
+  .vehicle-card .thumb .tag-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: var(--ink);
+    padding: 4px 12px;
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 2;
+  }
+  .vehicle-card .thumb .price-flag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    color: var(--paper);
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 2;
+  }
+  .vehicle-card .thumb .price-flag span {
+    color: var(--amber);
+  }
+  .vehicle-card .thumb .fallback-emoji {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    width: 100%;
+    height: 100%;
+    background: #F4F6F8;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">
+      <img src="images/logo.png" alt="Wonkerh's" style="height:32px; width:auto;" onerror="this.style.display='none'">
+      Wonkerh's<span>·</span>Car&nbsp;Hire
+    </a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html" class="active">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="login.html" class="nav-phone">Login</a>
+      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="wrap in">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Fleet</div>
+    <h1>The full fleet</h1>
+    <p>Fourteen models across five categories, all serviced between every rental and available at any of our branches.</p>
+  </div>
+  <div class="route-strip"></div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="filter-row">
+      <button class="filter-chip active" data-filter="all">All Vehicles</button>
+      <button class="filter-chip" data-filter="mini">Mini</button>
+      <button class="filter-chip" data-filter="family">Family</button>
+      <button class="filter-chip" data-filter="suv">SUV</button>
+      <button class="filter-chip" data-filter="group">Groups &amp; Vans</button>
+      <button class="filter-chip" data-filter="luxury">Luxury</button>
+    </div>
+
+    <div class="fleet-grid">
+      <!-- MINI CATEGORY -->
+      <div class="vehicle-card" data-category="mini">
+        <div class="thumb">
+          <img src="images/starlet.jpg" alt="Toyota Starlet" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚙</div>'">
+          <span class="tag-badge">Popular</span>
+          <div class="price-flag">From <span>R349</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Mini</span>
+          <h3>Toyota Starlet</h3>
+          <div class="specs"><span>5 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R349<small> / day</small></span><a href="vehicle.html?car=starlet" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="mini">
+        <div class="thumb">
+          <img src="images/polo.jpg" alt="Volkswagen Polo Vivo" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚙</div>'">
+          <div class="price-flag">From <span>R379</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Mini</span>
+          <h3>Volkswagen Polo Vivo</h3>
+          <div class="specs"><span>5 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R379<small> / day</small></span><a href="vehicle.html?car=polo" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="mini">
+        <div class="thumb">
+          <img src="images/swift.jpg" alt="Suzuki Swift" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚙</div>'">
+          <span class="tag-badge">Auto</span>
+          <div class="price-flag">From <span>R399</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Mini</span>
+          <h3>Suzuki Swift</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R399<small> / day</small></span><a href="vehicle.html?car=swift" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <!-- FAMILY CATEGORY -->
+      <div class="vehicle-card" data-category="family">
+        <div class="thumb">
+          <img src="images/i10.jpg" alt="Hyundai Grand i10" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚘</div>'">
+          <span class="tag-badge">Family</span>
+          <div class="price-flag">From <span>R529</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Family</span>
+          <h3>Hyundai Grand i10</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R529<small> / day</small></span><a href="vehicle.html?car=i10" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="family">
+        <div class="thumb">
+          <img src="images/corolla.jpg" alt="Toyota Corolla" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚘</div>'">
+          <span class="tag-badge">Best Seller</span>
+          <div class="price-flag">From <span>R589</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Family</span>
+          <h3>Toyota Corolla</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R589<small> / day</small></span><a href="vehicle.html?car=corolla" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="family">
+        <div class="thumb">
+          <img src="images/figo.jpg" alt="Ford Figo" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚘</div>'">
+          <div class="price-flag">From <span>R479</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Family</span>
+          <h3>Ford Figo</h3>
+          <div class="specs"><span>5 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R479<small> / day</small></span><a href="vehicle.html?car=figo" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <!-- SUV CATEGORY -->
+      <div class="vehicle-card" data-category="suv">
+        <div class="thumb">
+          <img src="images/ecosport.jpg" alt="Ford EcoSport" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🏔️</div>'">
+          <span class="tag-badge">SUV</span>
+          <div class="price-flag">From <span>R749</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">SUV</span>
+          <h3>Ford EcoSport</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R749<small> / day</small></span><a href="vehicle.html?car=ecosport" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="suv">
+        <div class="thumb">
+          <img src="images/creta.jpg" alt="Hyundai Creta" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🏔️</div>'">
+          <span class="tag-badge">Premium</span>
+          <div class="price-flag">From <span>R829</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">SUV</span>
+          <h3>Hyundai Creta</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R829<small> / day</small></span><a href="vehicle.html?car=creta" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="suv">
+        <div class="thumb">
+          <img src="images/fortuner.jpg" alt="Toyota Fortuner" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🏔️</div>'">
+          <span class="tag-badge">7-Seater</span>
+          <div class="price-flag">From <span>R1099</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">SUV</span>
+          <h3>Toyota Fortuner</h3>
+          <div class="specs"><span>7 seats</span><span>Auto</span><span>4x2</span></div>
+          <div class="price-row"><span class="price">R1099<small> / day</small></span><a href="vehicle.html?car=fortuner" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <!-- GROUP & VANS CATEGORY -->
+      <div class="vehicle-card" data-category="group">
+        <div class="thumb">
+          <img src="images/quantum.jpg" alt="Toyota Quantum" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚐</div>'">
+          <span class="tag-badge">10-Seater</span>
+          <div class="price-flag">From <span>R899</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Group</span>
+          <h3>Toyota Quantum</h3>
+          <div class="specs"><span>10 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R899<small> / day</small></span><a href="vehicle.html?car=quantum" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="group">
+        <div class="thumb">
+          <img src="images/transporter.jpg" alt="Volkswagen Transporter" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚐</div>'">
+          <div class="price-flag">From <span>R949</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Group</span>
+          <h3>Volkswagen Transporter</h3>
+          <div class="specs"><span>9 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R949<small> / day</small></span><a href="vehicle.html?car=transporter" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="group">
+        <div class="thumb">
+          <img src="images/hilux.jpg" alt="Toyota Hilux" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🚚</div>'">
+          <span class="tag-badge">Bakkie</span>
+          <div class="price-flag">From <span>R899</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Bakkie</span>
+          <h3>Toyota Hilux</h3>
+          <div class="specs"><span>2 seats</span><span>Manual</span><span>1 Ton</span></div>
+          <div class="price-row"><span class="price">R899<small> / day</small></span><a href="vehicle.html?car=hilux" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <!-- LUXURY CATEGORY -->
+      <div class="vehicle-card" data-category="luxury">
+        <div class="thumb">
+          <img src="images/bmw.jpg" alt="BMW 3 Series" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🏎️</div>'">
+          <span class="tag-badge">Premium</span>
+          <div class="price-flag">From <span>R1349</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Luxury</span>
+          <h3>BMW 3 Series</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>Leather</span></div>
+          <div class="price-row"><span class="price">R1349<small> / day</small></span><a href="vehicle.html?car=bmw" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+
+      <div class="vehicle-card" data-category="luxury">
+        <div class="thumb">
+          <img src="images/mercedes.jpg" alt="Mercedes-Benz C-Class" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'fallback-emoji\'>🏎️</div>'">
+          <span class="tag-badge">Executive</span>
+          <div class="price-flag">From <span>R1499</span>/day</div>
+        </div>
+        <div class="body">
+          <span class="tag">Luxury</span>
+          <h3>Mercedes-Benz C-Class</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>Leather</span></div>
+          <div class="price-row"><span class="price">R1499<small> / day</small></span><a href="vehicle.html?car=mercedes" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div class="wrap">
+    <h2>Not sure which car fits your trip?</h2>
+    <a href="contact.html" class="btn btn-dark">Ask Us — We'll Help You Pick</a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="images/logo.png" alt="Wonkerh's" style="height:28px; width:auto;" onerror="this.style.display='none'">
+          Wonkerh's<span>·</span>Car&nbsp;Hire
+        </div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

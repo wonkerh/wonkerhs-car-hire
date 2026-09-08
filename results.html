@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Available Cars — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">Wonkerh's<span>·</span>Car&nbsp;Hire</a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="login.html" class="nav-phone">Login</a>
+      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </div>
+</header>
+
+<section style="padding-top:0;">
+  <div class="wrap" style="padding-top:36px;">
+    <div class="search-card">
+      <form class="search-card-inner js-search-form">
+        <div class="search-field">
+          <label for="pickup-branch">Pick-up branch</label>
+          <select id="pickup-branch" name="pickup-branch">
+            <option>Pietermaritzburg</option>
+            <option>Durban — King Shaka</option>
+            <option>Durban — Springfield</option>
+            <option>Johannesburg — OR Tambo</option>
+            <option>Cape Town — Airport</option>
+            <option>Richards Bay</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="pickup-date">Pick-up date</label>
+          <input type="date" id="pickup-date" name="pickup-date">
+        </div>
+        <div class="search-field">
+          <label for="dropoff-branch">Drop-off branch</label>
+          <select id="dropoff-branch" name="dropoff-branch">
+            <option>Same as pick-up</option>
+            <option>Pietermaritzburg</option>
+            <option>Durban — King Shaka</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="dropoff-date">Drop-off date</label>
+          <input type="date" id="dropoff-date" name="dropoff-date">
+        </div>
+        <div class="search-submit">
+          <button type="submit">Update Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:36px;">
+  <div class="wrap">
+    <div class="results-layout">
+      <aside class="results-sidebar">
+        <h4>Vehicle Type</h4>
+        <label class="check-row"><input type="checkbox" class="js-result-filter" data-group="cat" data-cat="mini"> Mini</label>
+        <label class="check-row"><input type="checkbox" class="js-result-filter" data-group="cat" data-cat="family"> Family</label>
+        <label class="check-row"><input type="checkbox" class="js-result-filter" data-group="cat" data-cat="suv"> SUV</label>
+        <label class="check-row"><input type="checkbox" class="js-result-filter" data-group="cat" data-cat="group"> Groups &amp; Vans</label>
+        <label class="check-row"><input type="checkbox" class="js-result-filter" data-group="cat" data-cat="luxury"> Luxury</label>
+
+        <h4 style="margin-top:26px;">Transmission</h4>
+        <label class="check-row"><input type="checkbox"> Automatic</label>
+        <label class="check-row"><input type="checkbox"> Manual</label>
+
+        <h4 style="margin-top:26px;">Max Price / Day</h4>
+        <input type="range" min="300" max="1500" value="1500" style="width:100%;">
+      </aside>
+
+      <div>
+        <div class="results-count">
+          Showing 8 cars in <strong class="js-branch-label">Pietermaritzburg</strong>
+        </div>
+        <div class="fleet-grid cols-3">
+          <div class="vehicle-card" data-category="mini">
+            <div class="thumb">🚙</div>
+            <div class="body">
+              <span class="tag">Mini</span>
+              <h3>Toyota Starlet</h3>
+              <div class="specs"><span>5 seats</span><span>Manual</span><span>A/C</span></div>
+              <div class="price-row"><span class="price">R349<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+          <div class="vehicle-card" data-category="mini">
+            <div class="thumb">🚙</div>
+            <div class="body">
+              <span class="tag">Mini</span>
+              <h3>Suzuki Swift</h3>
+              <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+              <div class="price-row"><span class="price">R399<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+          <div class="vehicle-card" data-category="family">
+            <div class="thumb">🚘</div>
+            <div class="body">
+              <span class="tag">Family</span>
+              <h3>Hyundai Grand i10</h3>
+              <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+              <div class="price-row"><span class="price">R529<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+          <div class="vehicle-card" data-category="family">
+            <div class="thumb">🚘</div>
+            <div class="body">
+              <span class="tag">Family</span>
+              <h3>Toyota Corolla</h3>
+              <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+              <div class="price-row"><span class="price">R589<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+          <div class="vehicle-card" data-category="suv">
+            <div class="thumb">🏔️</div>
+            <div class="body">
+              <span class="tag">SUV</span>
+              <h3>Ford EcoSport</h3>
+              <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+              <div class="price-row"><span class="price">R749<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+          <div class="vehicle-card" data-category="suv">
+            <div class="thumb">🏔️</div>
+            <div class="body">
+              <span class="tag">SUV</span>
+              <h3>Hyundai Creta</h3>
+              <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+              <div class="price-row"><span class="price">R829<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+          <div class="vehicle-card" data-category="group">
+            <div class="thumb">🚐</div>
+            <div class="body">
+              <span class="tag">Group</span>
+              <h3>Toyota Quantum</h3>
+              <div class="specs"><span>10 seats</span><span>Manual</span><span>A/C</span></div>
+              <div class="price-row"><span class="price">R899<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+          <div class="vehicle-card" data-category="luxury">
+            <div class="thumb">🏎️</div>
+            <div class="body">
+              <span class="tag">Luxury</span>
+              <h3>BMW 3 Series</h3>
+              <div class="specs"><span>5 seats</span><span>Auto</span><span>Leather</span></div>
+              <div class="price-row"><span class="price">R1349<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Select</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Wonkerh's<span>·</span>Car&nbsp;Hire</div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

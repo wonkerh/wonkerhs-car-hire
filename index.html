@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wonkerh's Car Hire — Get There, Your Way</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  /* Hero with image background */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 72px 0 0;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: 
+      radial-gradient(circle at 70% 30%, rgba(255,176,26,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(30,123,106,0.1) 0%, transparent 50%),
+      linear-gradient(180deg, var(--ink) 0%, #1D2327 100%);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-image {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .hero-image:hover img {
+    transform: scale(1.03);
+  }
+
+  .hero-image .badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--paper);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .hero h1 {
+    font-size: 54px;
+    color: var(--paper);
+    line-height: 1.1;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--amber);
+    background: linear-gradient(135deg, var(--amber), #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p.lede {
+    max-width: 480px;
+    font-size: 17px;
+    color: #C9CFCF;
+    margin-top: 20px;
+    line-height: 1.7;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .hero-stats div strong {
+    display: block;
+    font-size: 28px;
+    font-family: 'Archivo Black', sans-serif;
+    color: var(--amber);
+  }
+  .hero-stats div span {
+    font-size: 13px;
+    color: #9AA3A3;
+  }
+
+  @media (max-width: 820px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero h1 {
+      font-size: 38px;
+    }
+    .hero-image img {
+      height: 220px;
+    }
+  }
+
+  /* Vehicle card images */
+  .vehicle-card .thumb {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background: #F4F6F8;
+  }
+  .vehicle-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .vehicle-card:hover .thumb img {
+    transform: scale(1.05);
+  }
+  .vehicle-card .thumb .tag-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: var(--ink);
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+
+  .search-wrap {
+    margin-top: -46px;
+    position: relative;
+    z-index: 5;
+    padding-bottom: 0;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">
+      <img src="images/logo.png" alt="Wonkerh's" style="height:32px; width:auto;" onerror="this.style.display='none'">
+      Wonkerh's<span>·</span>Car&nbsp;Hire
+    </a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="login.html" class="nav-phone">Login</a>
+      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow-tag">⭐ Student-run · KZN owned</span>
+        <h1>Wheels for whatever<br><em>your</em> road looks like.</h1>
+        <p class="lede">From a weekend run to the Durban beachfront to a semester of reliable transport in Pietermaritzburg — Wonkerh's Car Hire keeps it simple, honest, and easy to book online.</p>
+        <div style="margin-top:30px; display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="#book" class="btn btn-amber">Search Cars</a>
+          <a href="vehicles.html" class="btn btn-outline-light">Browse Fleet</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>12</strong><span>Pickup points</span></div>
+          <div><strong>4.8/5</strong><span>Average rating</span></div>
+          <div><strong>24/7</strong><span>Roadside support</span></div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="images/hero-car.jpg" alt="Wonkerh's Car Hire fleet" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22340%22%3E%3Crect fill=%22%23333%22 width=%22800%22 height=%22340%22/%3E%3Ctext x=%22400%22 y=%22170%22 text-anchor=%22middle%22 fill=%22%23FFB01A%22 font-size=%2236%22 font-family=%22sans-serif%22%3E🚗%3C/text%3E%3C/svg%3E'">
+        <div class="badge">📸 2024 Toyota Corolla • Featured</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap search-wrap" id="book">
+    <div class="search-card">
+      <form class="search-card-inner js-search-form">
+        <div class="search-field">
+          <label for="pickup-branch">Pick-up branch</label>
+          <select id="pickup-branch" name="pickup-branch">
+            <option>Pietermaritzburg</option>
+            <option>Durban — King Shaka</option>
+            <option>Durban — Springfield</option>
+            <option>Johannesburg — OR Tambo</option>
+            <option>Cape Town — Airport</option>
+            <option>Richards Bay</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="pickup-date">Pick-up date</label>
+          <input type="date" id="pickup-date" name="pickup-date">
+        </div>
+        <div class="search-field">
+          <label for="dropoff-branch">Drop-off branch</label>
+          <select id="dropoff-branch" name="dropoff-branch">
+            <option>Same as pick-up</option>
+            <option>Pietermaritzburg</option>
+            <option>Durban — King Shaka</option>
+            <option>Johannesburg — OR Tambo</option>
+            <option>Cape Town — Airport</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="dropoff-date">Drop-off date</label>
+          <input type="date" id="dropoff-date" name="dropoff-date">
+        </div>
+        <div class="search-submit">
+          <button type="submit">Search Cars</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div style="height:80px;"></div>
+</section>
+
+<section id="fleet">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">The Fleet</span>
+      <h2>A car for every kind of trip</h2>
+      <p>Clean, serviced, and ready to go — pick a category and we'll show you what's available at your branch.</p>
+    </div>
+    <div class="fleet-grid reveal">
+      <div class="vehicle-card">
+        <div class="thumb">
+          <img src="images/starlet.jpg" alt="Toyota Starlet" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22180%22%3E%3Crect fill=%22%23eee%22 width=%22400%22 height=%22180%22/%3E%3Ctext x=%22200%22 y=%2295%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2236%22 font-family=%22sans-serif%22%3E🚙%3C/text%3E%3C/svg%3E'">
+          <span class="tag-badge">Popular</span>
+        </div>
+        <div class="body">
+          <span class="tag">Mini</span>
+          <h3>Toyota Starlet</h3>
+          <div class="specs"><span>5 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R349<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <div class="thumb">
+          <img src="images/i10.jpg" alt="Hyundai Grand i10" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22180%22%3E%3Crect fill=%22%23eee%22 width=%22400%22 height=%22180%22/%3E%3Ctext x=%22200%22 y=%2295%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2236%22 font-family=%22sans-serif%22%3E🚘%3C/text%3E%3C/svg%3E'">
+        </div>
+        <div class="body">
+          <span class="tag">Family</span>
+          <h3>Hyundai Grand i10</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R529<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <div class="thumb">
+          <img src="images/ecosport.jpg" alt="Ford EcoSport" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22180%22%3E%3Crect fill=%22%23eee%22 width=%22400%22 height=%22180%22/%3E%3Ctext x=%22200%22 y=%2295%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2236%22 font-family=%22sans-serif%22%3E🏔️%3C/text%3E%3C/svg%3E'">
+          <span class="tag-badge">SUV</span>
+        </div>
+        <div class="body">
+          <span class="tag">SUV</span>
+          <h3>Ford EcoSport</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R749<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <div class="thumb">
+          <img src="images/quantum.jpg" alt="Toyota Quantum" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22180%22%3E%3Crect fill=%22%23eee%22 width=%22400%22 height=%22180%22/%3E%3Ctext x=%22200%22 y=%2295%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2236%22 font-family=%22sans-serif%22%3E🚐%3C/text%3E%3C/svg%3E'">
+          <span class="tag-badge">Group</span>
+        </div>
+        <div class="body">
+          <span class="tag">Group</span>
+          <h3>Toyota Quantum</h3>
+          <div class="specs"><span>10 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R899<small> / day</small></span><a href="vehicle.html" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:38px;">
+      <a href="vehicles.html" class="btn btn-dark">View Full Fleet</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Why Wonkerh's</span>
+      <h2>Built by a student, run like a business</h2>
+      <p>No hidden admin fees, no fine print gymnastics — just a straightforward booking flow and cars that actually show up clean.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-cell">
+        <span class="num">01</span>
+        <h3>Transparent pricing</h3>
+        <p>The price you see at search is the price you pay. Insurance and mileage terms are shown before you confirm.</p>
+      </div>
+      <div class="why-cell">
+        <span class="num">02</span>
+        <h3>Flexible cancellation</h3>
+        <p>Plans change. Cancel or reschedule free of charge up to 24 hours before pick-up.</p>
+      </div>
+      <div class="why-cell">
+        <span class="num">03</span>
+        <h3>Real support</h3>
+        <p>A phone number that's answered by a person, not a queue — every day of the week.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark" id="branches">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Where To Find Us</span>
+      <h2>Pickup points across KZN and beyond</h2>
+      <p>Starting from our home base in Pietermaritzburg, with partner counters opening up around the country.</p>
+    </div>
+    <div class="branch-list reveal">
+      <a class="branch-item" href="branches.html"><span>Pietermaritzburg</span><span class="city">HQ Branch</span></a>
+      <a class="branch-item" href="branches.html"><span>Durban — King Shaka</span><span class="city">Airport</span></a>
+      <a class="branch-item" href="branches.html"><span>Durban — Springfield</span><span class="city">City</span></a>
+      <a class="branch-item" href="branches.html"><span>Richards Bay</span><span class="city">City</span></a>
+      <a class="branch-item" href="branches.html"><span>Johannesburg — OR Tambo</span><span class="city">Airport</span></a>
+      <a class="branch-item" href="branches.html"><span>Cape Town — Airport</span><span class="city">Airport</span></a>
+    </div>
+    <div style="text-align:center; margin-top:34px;">
+      <a href="branches.html" class="btn btn-outline-light">See All Branches</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Reviews</span>
+      <h2>What renters are saying</h2>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Booked the night before an exam trip home and the whole thing took five minutes. Car was spotless."</p>
+        <div class="who">
+          <img src="https://i.pravatar.cc/40?img=1" alt="Nomvula K.">
+          <div>
+            Nomvula K.
+            <span>Pietermaritzburg</span>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Way cheaper than the big-name counters at the airport, and the staff actually explained the insurance to me."</p>
+        <div class="who">
+          <img src="https://i.pravatar.cc/40?img=2" alt="Sipho M.">
+          <div>
+            Sipho M.
+            <span>Durban</span>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★☆</div>
+        <p>"Used the Quantum for a res move-in weekend — ten of us plus luggage, no dramas."</p>
+        <div class="who">
+          <img src="https://i.pravatar.cc/40?img=3" alt="Aidan P.">
+          <div>
+            Aidan P.
+            <span>Johannesburg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div class="wrap">
+    <h2>Ready to hit the road?</h2>
+    <a href="#book" class="btn btn-dark">Search Available Cars</a>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="images/logo.png" alt="Wonkerh's" style="height:28px; width:auto;" onerror="this.style.display='none'">
+          Wonkerh's<span>·</span>Car&nbsp;Hire
+        </div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

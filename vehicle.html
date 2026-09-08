@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toyota Corolla — Wonkerh's Car Hire</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .gallery-main {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--paper-line);
+    background: #F4F6F8;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .gallery-thumbs {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .gallery-thumbs div {
+    border-radius: 8px;
+    overflow: hidden;
+    flex: 1;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--transition);
+    height: 70px;
+    background: #F4F6F8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+  }
+  .gallery-thumbs div:hover,
+  .gallery-thumbs div.active {
+    border-color: var(--amber);
+  }
+  .gallery-thumbs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .vehicle-card .thumb {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+    background: #F4F6F8;
+  }
+  .vehicle-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .vehicle-card:hover .thumb img {
+    transform: scale(1.05);
+  }
+  .vehicle-card .thumb .tag-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: var(--ink);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 44px;
+  }
+
+  .book-panel {
+    background: #fff;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow-card);
+    position: sticky;
+    top: 100px;
+  }
+  .price-big {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 42px;
+  }
+  .price-big span {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink-faint);
+  }
+  .includes li {
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding: 8px 0 8px 28px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%231E7B6A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') left center no-repeat;
+    background-size: 16px;
+  }
+
+  @media (max-width: 820px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+    .book-panel {
+      position: static;
+    }
+    .gallery-main {
+      height: 220px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <a href="index.html" class="logo">
+      <img src="images/logo.png" alt="Wonkerh's" style="height:32px; width:auto;" onerror="this.style.display='none'">
+      Wonkerh's<span>·</span>Car&nbsp;Hire
+    </a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="vehicles.html" class="active">Fleet</a></li>
+        <li><a href="branches.html">Branches</a></li>
+        <li><a href="long-term.html">Long-Term</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQs</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="login.html" class="nav-phone">Login</a>
+      <a href="results.html" class="btn btn-amber btn-sm">Book Now</a>
+      <button class="burger" aria-label="Menu">&#9776;</button>
+    </div>
+  </div>
+  <div class="mobile-panel">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="vehicles.html">Fleet</a></li>
+      <li><a href="branches.html">Branches</a></li>
+      <li><a href="long-term.html">Long-Term</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="faq.html">FAQs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="page-head" style="padding:40px 0 34px;">
+  <div class="wrap in">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="vehicles.html">Fleet</a> / Toyota Corolla</div>
+    <h1 style="font-size:32px;">Toyota Corolla <span class="badge badge-amber" style="vertical-align:middle; margin-left:10px;">Family</span></h1>
+  </div>
+  <div class="route-strip"></div>
+</div>
+
+<section style="padding-top:56px;">
+  <div class="wrap">
+    <div class="detail-grid">
+      <div>
+        <div class="gallery-main">
+          <img src="images/corolla.jpg" alt="Toyota Corolla" loading="lazy" onerror="this.innerHTML='🚘'">
+        </div>
+        <div class="gallery-thumbs">
+          <div class="active">
+            <img src="images/corolla.jpg" alt="Corolla front" loading="lazy" onerror="this.innerHTML='🚘'">
+          </div>
+          <div>
+            <img src="images/interior.jpg" alt="Corolla interior" loading="lazy" onerror="this.innerHTML='🪑'">
+          </div>
+          <div>
+            <img src="images/corolla.jpg" alt="Corolla rear" loading="lazy" onerror="this.innerHTML='🧳'">
+          </div>
+          <div>
+            <img src="images/corolla.jpg" alt="Corolla side" loading="lazy" onerror="this.innerHTML='🔧'">
+          </div>
+        </div>
+
+        <div style="margin-top:44px;">
+          <h2 style="font-size:22px; margin-bottom:16px;">Specifications</h2>
+          <table class="spec-table">
+            <tr><td>Body type</td><td>Sedan</td></tr>
+            <tr><td>Seats</td><td>5 adults</td></tr>
+            <tr><td>Transmission</td><td>Automatic</td></tr>
+            <tr><td>Fuel type</td><td>Petrol</td></tr>
+            <tr><td>Fuel economy</td><td>~6.4 L / 100km</td></tr>
+            <tr><td>Luggage</td><td>2 large + 1 small bag</td></tr>
+            <tr><td>Air conditioning</td><td>Yes</td></tr>
+            <tr><td>Minimum driver age</td><td>21, licence held 2+ years</td></tr>
+          </table>
+        </div>
+
+        <div style="margin-top:44px;">
+          <h2 style="font-size:22px; margin-bottom:16px;">About this car</h2>
+          <p style="color:var(--ink-soft); font-size:15px; max-width:620px; line-height:1.8;">
+            The Corolla is our most requested family sedan — smooth on the N3, easy to park on campus,
+            and cheap enough on fuel that a Durban-and-back weekend won't wreck your budget. Every unit
+            is serviced and interior-detailed between rentals.
+          </p>
+          <ul style="margin-top:16px; list-style:none; padding:0;">
+            <li style="padding:6px 0 6px 28px; background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231E7B6A%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%2220 6 9 17 4 12%22/></svg>') left center no-repeat; background-size:16px; font-size:14px; color:var(--ink-soft);">Apple CarPlay & Android Auto</li>
+            <li style="padding:6px 0 6px 28px; background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231E7B6A%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%2220 6 9 17 4 12%22/></svg>') left center no-repeat; background-size:16px; font-size:14px; color:var(--ink-soft);">Rear parking sensors with camera</li>
+            <li style="padding:6px 0 6px 28px; background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231E7B6A%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%2220 6 9 17 4 12%22/></svg>') left center no-repeat; background-size:16px; font-size:14px; color:var(--ink-soft);">Bluetooth connectivity</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="book-panel">
+        <div class="price-big">R589 <span>/ day</span></div>
+        <p style="font-size:12.5px; color:var(--ink-faint); margin-top:4px;">Estimated for a 4-day rental from Pietermaritzburg. Final price shown at checkout.</p>
+
+        <div style="margin-top:16px; padding:12px 16px; background:#F4F6F8; border-radius:8px; font-size:13px; color:var(--ink-soft);">
+          <span style="font-weight:700;">⭐ 4.8/5</span> based on 142 reviews
+        </div>
+
+        <form style="margin-top:22px; display:flex; flex-direction:column; gap:14px;" onsubmit="return false;">
+          <div class="form-field">
+            <label for="v-pickup">Pick-up branch</label>
+            <select id="v-pickup">
+              <option>Pietermaritzburg</option>
+              <option>Durban — King Shaka</option>
+              <option>Johannesburg — OR Tambo</option>
+              <option>Cape Town — Airport</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="v-date">Pick-up date</label>
+            <input type="date" id="v-date">
+          </div>
+          <div class="form-field">
+            <label for="v-days">Number of days</label>
+            <select id="v-days">
+              <option>1 day</option>
+              <option>2 days</option>
+              <option selected>3 days</option>
+              <option>4 days</option>
+              <option>5 days</option>
+              <option>6 days</option>
+              <option>7 days</option>
+              <option>14 days</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-amber btn-block">Reserve This Car</button>
+        </form>
+
+        <ul class="includes" style="margin-top:22px; list-style:none; padding:0;">
+          <li>✅ Comprehensive insurance included</li>
+          <li>✅ 200km/day free, R2.50/km after</li>
+          <li>✅ Unlimited toll-free support</li>
+          <li>✅ Free cancellation up to 24hrs before</li>
+          <li>✅ No hidden fees</li>
+        </ul>
+
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--paper-line); display:flex; gap:12px; font-size:13px; color:var(--ink-faint);">
+          <span>🔒 Secure booking</span>
+          <span>💳 Pay at pickup</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Similar Cars</span>
+      <h2>You might also like</h2>
+    </div>
+    <div class="fleet-grid cols-3">
+      <div class="vehicle-card" data-category="family">
+        <div class="thumb">
+          <img src="images/i10.jpg" alt="Hyundai Grand i10" loading="lazy" onerror="this.innerHTML='🚘'">
+          <span class="tag-badge">Family</span>
+        </div>
+        <div class="body">
+          <span class="tag">Family</span>
+          <h3>Hyundai Grand i10</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R529<small> / day</small></span><a href="vehicle.html?car=i10" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card" data-category="family">
+        <div class="thumb">
+          <img src="images/figo.jpg" alt="Ford Figo" loading="lazy" onerror="this.innerHTML='🚘'">
+        </div>
+        <div class="body">
+          <span class="tag">Family</span>
+          <h3>Ford Figo</h3>
+          <div class="specs"><span>5 seats</span><span>Manual</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R479<small> / day</small></span><a href="vehicle.html?car=figo" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card" data-category="suv">
+        <div class="thumb">
+          <img src="images/creta.jpg" alt="Hyundai Creta" loading="lazy" onerror="this.innerHTML='🏔️'">
+          <span class="tag-badge">SUV</span>
+        </div>
+        <div class="body">
+          <span class="tag">SUV</span>
+          <h3>Hyundai Creta</h3>
+          <div class="specs"><span>5 seats</span><span>Auto</span><span>A/C</span></div>
+          <div class="price-row"><span class="price">R829<small> / day</small></span><a href="vehicle.html?car=creta" class="btn btn-outline btn-sm">Details</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="images/logo.png" alt="Wonkerh's" style="height:28px; width:auto;" onerror="this.style.display='none'">
+          Wonkerh's<span>·</span>Car&nbsp;Hire
+        </div>
+        <p style="max-width:220px; color:#8B9494;">Straightforward car rental, built from Pietermaritzburg outward.</p>
+        <div class="social-row" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="X">X</a>
+          <a href="#" aria-label="WhatsApp">WA</a>
+        </div>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="branches.html">Branches</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="faq.html#accidents">Accidents &amp; Breakdowns</a></li>
+          <li><a href="faq.html#terms">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Bookings</h4>
+        <ul>
+          <li><a href="vehicles.html">Browse Fleet</a></li>
+          <li><a href="results.html">Search Cars</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Wonkerh's Car Hire. All rights reserved.</span>
+      <span>Made in Pietermaritzburg, KZN</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>
